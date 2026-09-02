@@ -10,10 +10,14 @@ import {
   AlertCircle, 
   CornerDownLeft, 
   X, 
-  Layers
+  Layers,
+  Flame,
+  Bell,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 import { formatJalaliDate, toPersianDigits } from '../../lib/jalali';
-import { type TaskPriority } from '../../types';
+import { type TaskPriority, type TaskRecurrence } from '../../types';
 
 interface QuickAddTaskProps {
   defaultBoardId?: string;
@@ -36,6 +40,13 @@ export const QuickAddTask: React.FC<QuickAddTaskProps> = ({
   const [manualEstimate, setManualEstimate] = useState<number | null>(null);
   const [manualDueDate, setManualDueDate] = useState<number | null>(null);
 
+  // Habit & Challenge States
+  const [isHabitMode, setIsHabitMode] = useState(false);
+  const [habitDaysTotal, setHabitDaysTotal] = useState<number | null>(40);
+  const [customDaysInput, setCustomDaysInput] = useState('40');
+  const [habitTimeOfDay, setHabitTimeOfDay] = useState('18:00');
+  const [reminderMinutesBefore, setReminderMinutesBefore] = useState<number | null>(15);
+
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Update lists when board changes
@@ -54,14 +65,39 @@ export const QuickAddTask: React.FC<QuickAddTaskProps> = ({
   // Parse natural language in real-time
   const parsed = parseNaturalPersianTask(inputText);
 
+  // Auto-sync habit mode if natural language contains a challenge
+  useEffect(() => {
+    if (parsed.habitDaysTotal) {
+      setIsHabitMode(true);
+      setHabitDaysTotal(parsed.habitDaysTotal);
+      setCustomDaysInput(String(parsed.habitDaysTotal));
+      if (parsed.habitTimeOfDay) {
+        setHabitTimeOfDay(parsed.habitTimeOfDay);
+      }
+    }
+  }, [parsed.habitDaysTotal, parsed.habitTimeOfDay]);
+
   const finalPriority = manualPriority || parsed.priority;
   const finalEstimate = manualEstimate !== null ? manualEstimate : parsed.estimateMinutes;
-  const finalDueDate = manualDueDate !== null ? manualDueDate : parsed.dueAt;
+  
+  // If habit mode is active, set initial due date to today at habitTimeOfDay
+  let finalDueDate = manualDueDate !== null ? manualDueDate : parsed.dueAt;
+  if (isHabitMode && habitTimeOfDay && !manualDueDate && !parsed.dueAt) {
+    const today = new Date();
+    const [h, m] = habitTimeOfDay.split(':').map(Number);
+    if (!isNaN(h) && !isNaN(m)) {
+      today.setHours(h, m, 0, 0);
+      finalDueDate = today.getTime();
+    }
+  }
 
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     const title = parsed.title.trim();
     if (!title) return;
+
+    const daysCount = isHabitMode ? (habitDaysTotal || parseInt(customDaysInput, 10) || 40) : null;
+    const recurrence: TaskRecurrence = isHabitMode ? 'daily' : (parsed.recurrence || 'none');
 
     await addTask({
       title,
@@ -70,6 +106,12 @@ export const QuickAddTask: React.FC<QuickAddTaskProps> = ({
       priority: finalPriority,
       estimateMinutes: finalEstimate,
       dueAt: finalDueDate,
+      recurrence,
+      habitDaysTotal: daysCount,
+      habitDaysCompleted: 0,
+      habitStreak: 0,
+      habitTimeOfDay: isHabitMode ? habitTimeOfDay : null,
+      reminderMinutesBefore: isHabitMode ? reminderMinutesBefore : (parsed.reminderMinutesBefore ?? null),
       tags: parsed.tags,
     });
 
@@ -77,6 +119,7 @@ export const QuickAddTask: React.FC<QuickAddTaskProps> = ({
     setManualPriority(null);
     setManualEstimate(null);
     setManualDueDate(null);
+    setIsHabitMode(false);
 
     if (onClose) {
       onClose();
@@ -111,8 +154,8 @@ export const QuickAddTask: React.FC<QuickAddTaskProps> = ({
             <Plus className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="text-sm font-black text-gray-900 dark:text-white">ثبت سریع تسک</h3>
-            <p className="text-[11px] text-gray-500 dark:text-slate-400 font-medium">به فارسی بنویسید؛ زمان، تخمین و اولویت هوشمند استخراج می‌شوند</p>
+            <h3 className="text-sm font-black text-gray-900 dark:text-white">ثبت سریع تسک یا چالش</h3>
+            <p className="text-[11px] text-gray-500 dark:text-slate-400 font-medium">به فارسی بنویسید؛ زمان، تخمین، اولویت و چالش چندروزه هوشمند شناسایی می‌شوند</p>
           </div>
         </div>
 
@@ -136,7 +179,7 @@ export const QuickAddTask: React.FC<QuickAddTaskProps> = ({
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="مثال: فردا ساعت ۱۸ گزارش عملکرد ۳ ساعت #کاری !فوری"
+            placeholder="مثال: چالش ۴۰ روزه پیاده‌روی ساعت ۱۸:۳۰ با یادآوری #سلامت !مهم"
             className="w-full rounded-2xl bg-gray-50/80 dark:bg-[#0B131E] border border-gray-200 dark:border-slate-700 px-4 py-3 pe-12 text-xs sm:text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-600 dark:focus:border-emerald-500 transition font-medium"
           />
           <button
@@ -154,6 +197,11 @@ export const QuickAddTask: React.FC<QuickAddTaskProps> = ({
           <div className="flex items-center gap-2 p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/70 dark:border-emerald-500/30 text-[11px] text-emerald-900 dark:text-emerald-200 overflow-x-auto no-scrollbar">
             <Sparkles className="w-3.5 h-3.5 text-emerald-700 dark:text-emerald-400 shrink-0" />
             <span className="shrink-0 font-bold">شناسایی هوشمند:</span>
+            {parsed.extractedText.habitStr && (
+              <span className="px-2 py-0.5 rounded-md bg-emerald-600 text-white border border-emerald-700 shrink-0 shadow-2xs font-bold flex items-center gap-1">
+                <Flame className="w-3 h-3 fill-current" /> {parsed.extractedText.habitStr}
+              </span>
+            )}
             {parsed.extractedText.dateStr && (
               <span className="px-2 py-0.5 rounded-md bg-white dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-200 border border-emerald-200 dark:border-emerald-600/40 shrink-0 shadow-2xs font-medium">
                 📅 {parsed.extractedText.dateStr} {parsed.extractedText.timeStr || ''}
@@ -179,58 +227,57 @@ export const QuickAddTask: React.FC<QuickAddTaskProps> = ({
 
         {/* Quick Attribute Chips (One-tap selection) */}
         <div className="flex flex-wrap items-center gap-1.5 pt-1 text-xs">
-          {/* Due date quick presets */}
-          <div className="flex items-center gap-1 bg-gray-100/90 dark:bg-slate-800/60 p-1 rounded-xl border border-gray-200 dark:border-slate-700/60">
-            <Calendar className="w-3.5 h-3.5 text-gray-500 dark:text-slate-400 ms-1" />
-            <button
-              type="button"
-              onClick={() => setQuickDate(0, 18)}
-              className={`px-2 py-1 rounded-lg text-[11px] transition cursor-pointer ${
-                finalDueDate && new Date(finalDueDate).toDateString() === new Date().toDateString()
-                  ? 'bg-emerald-600 text-white font-bold'
-                  : 'text-gray-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 font-medium'
-              }`}
-            >
-              امروز
-            </button>
-            <button
-              type="button"
-              onClick={() => setQuickDate(1, 18)}
-              className={`px-2 py-1 rounded-lg text-[11px] transition cursor-pointer ${
-                finalDueDate && new Date(finalDueDate).toDateString() === new Date(Date.now() + 86400000).toDateString()
-                  ? 'bg-emerald-600 text-white font-bold'
-                  : 'text-gray-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 font-medium'
-              }`}
-            >
-              فردا
-            </button>
-            <button
-              type="button"
-              onClick={() => setQuickDate(7, 18)}
-              className="px-2 py-1 rounded-lg text-[11px] text-gray-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 transition cursor-pointer font-medium"
-            >
-              هفته بعد
-            </button>
-          </div>
+          {/* Habit Mode Toggle Button */}
+          <button
+            type="button"
+            id="quick-add-habit-toggle-btn"
+            onClick={() => setIsHabitMode(!isHabitMode)}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border font-bold text-xs transition cursor-pointer ${
+              isHabitMode
+                ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs'
+                : 'bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100 dark:bg-emerald-500/10 dark:text-emerald-300 dark:border-emerald-500/30'
+            }`}
+          >
+            <Flame className="w-3.5 h-3.5 fill-current text-amber-300" />
+            <span>چالش / عادت روزانه (مثلاً ۴۰ روز)</span>
+            {isHabitMode ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+          </button>
 
-          {/* Estimate quick presets */}
-          <div className="flex items-center gap-1 bg-gray-100/90 dark:bg-slate-800/60 p-1 rounded-xl border border-gray-200 dark:border-slate-700/60">
-            <Clock className="w-3.5 h-3.5 text-gray-500 dark:text-slate-400 ms-1" />
-            {[15, 30, 60, 120].map((mins) => (
+          {/* Due date quick presets (shown when not in habit mode) */}
+          {!isHabitMode && (
+            <div className="flex items-center gap-1 bg-gray-100/90 dark:bg-slate-800/60 p-1 rounded-xl border border-gray-200 dark:border-slate-700/60">
+              <Calendar className="w-3.5 h-3.5 text-gray-500 dark:text-slate-400 ms-1" />
               <button
-                key={mins}
                 type="button"
-                onClick={() => setManualEstimate(mins)}
+                onClick={() => setQuickDate(0, 18)}
                 className={`px-2 py-1 rounded-lg text-[11px] transition cursor-pointer ${
-                  finalEstimate === mins
-                    ? 'bg-emerald-700 text-white font-bold'
+                  finalDueDate && new Date(finalDueDate).toDateString() === new Date().toDateString()
+                    ? 'bg-emerald-600 text-white font-bold'
                     : 'text-gray-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 font-medium'
                 }`}
               >
-                {mins === 60 ? '۱س' : mins === 120 ? '۲س' : `${toPersianDigits(mins)}د`}
+                امروز
               </button>
-            ))}
-          </div>
+              <button
+                type="button"
+                onClick={() => setQuickDate(1, 18)}
+                className={`px-2 py-1 rounded-lg text-[11px] transition cursor-pointer ${
+                  finalDueDate && new Date(finalDueDate).toDateString() === new Date(Date.now() + 86400000).toDateString()
+                    ? 'bg-emerald-600 text-white font-bold'
+                    : 'text-gray-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 font-medium'
+                }`}
+              >
+                فردا
+              </button>
+              <button
+                type="button"
+                onClick={() => setQuickDate(7, 18)}
+                className="px-2 py-1 rounded-lg text-[11px] text-gray-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 transition cursor-pointer font-medium"
+              >
+                هفته بعد
+              </button>
+            </div>
+          )}
 
           {/* Priority quick presets */}
           <div className="flex items-center gap-1 bg-gray-100/90 dark:bg-slate-800/60 p-1 rounded-xl border border-gray-200 dark:border-slate-700/60">
@@ -259,6 +306,101 @@ export const QuickAddTask: React.FC<QuickAddTaskProps> = ({
             </button>
           </div>
         </div>
+
+        {/* Extended Habit & Custom Routine Panel */}
+        {isHabitMode && (
+          <div className="p-3.5 rounded-2xl bg-emerald-50/70 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800/40 space-y-3 animate-fadeIn">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-emerald-900 dark:text-emerald-200 flex items-center gap-1.5">
+                <Flame className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                <span>تنظیم دوره چالش (هر روز برای چند روز؟):</span>
+              </span>
+              <span className="text-[11px] font-medium text-emerald-700 dark:text-emerald-400">
+                هر روز تکرار خودکار می‌شود و استریک شما ثبت می‌گردد
+              </span>
+            </div>
+
+            {/* Habit Days Preset Chips */}
+            <div className="flex flex-wrap items-center gap-2">
+              {[21, 30, 40, 66, 100].map((days) => (
+                <button
+                  key={days}
+                  type="button"
+                  onClick={() => {
+                    setHabitDaysTotal(days);
+                    setCustomDaysInput(String(days));
+                  }}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border ${
+                    habitDaysTotal === days
+                      ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs'
+                      : 'bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-300 border-gray-200 dark:border-slate-700 hover:border-emerald-400'
+                  }`}
+                >
+                  {toPersianDigits(days)} روزه
+                </button>
+              ))}
+
+              {/* Custom Number Input */}
+              <div className="flex items-center gap-1.5 bg-white dark:bg-slate-800 px-2.5 py-1 rounded-xl border border-gray-200 dark:border-slate-700">
+                <span className="text-[11px] text-gray-500 dark:text-slate-400">دلخواه:</span>
+                <input
+                  type="number"
+                  min="1"
+                  max="365"
+                  value={customDaysInput}
+                  onChange={(e) => {
+                    setCustomDaysInput(e.target.value);
+                    const parsedDays = parseInt(e.target.value, 10);
+                    setHabitDaysTotal(isNaN(parsedDays) ? null : parsedDays);
+                  }}
+                  placeholder="۴۰"
+                  className="w-14 bg-transparent text-xs font-bold text-gray-900 dark:text-white focus:outline-none text-center"
+                />
+                <span className="text-[11px] text-gray-500 dark:text-slate-400">روز</span>
+              </div>
+            </div>
+
+            {/* Time & Reminder Controls */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1 border-t border-emerald-200/60 dark:border-emerald-800/30">
+              {/* Daily Time */}
+              <div className="flex items-center justify-between gap-2 bg-white dark:bg-slate-800/80 p-2 rounded-xl border border-emerald-200/60 dark:border-slate-700">
+                <span className="text-xs font-semibold text-gray-700 dark:text-slate-300 flex items-center gap-1.5">
+                  <Clock className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                  <span>ساعت روزانه:</span>
+                </span>
+                <input
+                  type="time"
+                  value={habitTimeOfDay}
+                  onChange={(e) => setHabitTimeOfDay(e.target.value)}
+                  className="bg-gray-100 dark:bg-slate-900 text-xs font-bold text-gray-900 dark:text-white px-2 py-1 rounded-lg border border-gray-200 dark:border-slate-700 focus:outline-none cursor-pointer"
+                />
+              </div>
+
+              {/* Reminder Amount */}
+              <div className="flex items-center justify-between gap-2 bg-white dark:bg-slate-800/80 p-2 rounded-xl border border-emerald-200/60 dark:border-slate-700">
+                <span className="text-xs font-semibold text-gray-700 dark:text-slate-300 flex items-center gap-1.5">
+                  <Bell className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                  <span>میزان یادآوری:</span>
+                </span>
+                <select
+                  value={reminderMinutesBefore !== null ? reminderMinutesBefore : ''}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setReminderMinutesBefore(val === '' ? null : parseInt(val, 10));
+                  }}
+                  className="bg-gray-100 dark:bg-slate-900 text-xs font-bold text-gray-900 dark:text-white px-2 py-1 rounded-lg border border-gray-200 dark:border-slate-700 focus:outline-none cursor-pointer"
+                >
+                  <option value="0">سر ساعت مقرر</option>
+                  <option value="5">۵ دقیقه قبل</option>
+                  <option value="15">۱۵ دقیقه قبل</option>
+                  <option value="30">۳۰ دقیقه قبل</option>
+                  <option value="60">۱ ساعت قبل</option>
+                  <option value="">بدون یادآوری</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Board & List Selector */}
         <div className="flex flex-wrap items-center justify-between gap-2.5 pt-2 text-xs border-t border-gray-100 dark:border-slate-800/80">
@@ -302,7 +444,7 @@ export const QuickAddTask: React.FC<QuickAddTaskProps> = ({
             className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-xs shadow-xs transition disabled:opacity-40 disabled:pointer-events-none cursor-pointer ms-auto"
           >
             <Plus className="w-4 h-4" />
-            <span>ثبت تسک</span>
+            <span>{isHabitMode ? 'ثبت چالش روزانه' : 'ثبت تسک'}</span>
           </button>
         </div>
       </form>

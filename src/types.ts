@@ -51,6 +51,11 @@ export const TaskSchema = z.object({
   remindAt: z.number().nullable().default(null), // timestamp
   completedAt: z.number().nullable().default(null),
   recurrence: z.enum(['none', 'daily', 'weekly', 'weekdays', 'monthly', 'custom']).default('none'),
+  habitDaysTotal: z.number().nullable().optional().default(null),
+  habitDaysCompleted: z.number().optional().default(0),
+  habitStreak: z.number().optional().default(0),
+  habitTimeOfDay: z.string().nullable().optional().default(null),
+  reminderMinutesBefore: z.number().nullable().optional().default(null),
   tags: z.array(z.string()).default([]),
   subtasks: z.array(SubtaskSchema).default([]),
   checklist: z.array(z.string()).default([]),
@@ -133,12 +138,17 @@ export interface NaturalParsedResult {
   priority: TaskPriority;
   tags: string[];
   confidence: number;
+  habitDaysTotal?: number | null;
+  habitTimeOfDay?: string | null;
+  recurrence?: TaskRecurrence;
+  reminderMinutesBefore?: number | null;
   extractedText: {
     dateStr?: string;
     timeStr?: string;
     estimateStr?: string;
     priorityStr?: string;
     tagStr?: string;
+    habitStr?: string;
   };
 }
 

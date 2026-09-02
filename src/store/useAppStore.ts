@@ -316,9 +316,14 @@ export const useAppStore = create<AppState>((set, get) => ({
       spentMinutes: taskData.spentMinutes || 0,
       dueAt: taskData.dueAt ?? null,
       startAt: taskData.startAt ?? null,
-      remindAt: taskData.remindAt ?? null,
+      remindAt: taskData.remindAt ?? (taskData.dueAt && taskData.reminderMinutesBefore !== null && taskData.reminderMinutesBefore !== undefined ? taskData.dueAt - (taskData.reminderMinutesBefore * 60 * 1000) : null),
       completedAt: null,
-      recurrence: taskData.recurrence || 'none',
+      recurrence: taskData.recurrence || (taskData.habitDaysTotal ? 'daily' : 'none'),
+      habitDaysTotal: taskData.habitDaysTotal ?? null,
+      habitDaysCompleted: taskData.habitDaysCompleted ?? 0,
+      habitStreak: taskData.habitStreak ?? 0,
+      habitTimeOfDay: taskData.habitTimeOfDay ?? null,
+      reminderMinutesBefore: taskData.reminderMinutesBefore ?? null,
       tags: taskData.tags || [],
       subtasks: taskData.subtasks || [],
       checklist: [],
@@ -382,17 +387,33 @@ export const useAppStore = create<AppState>((set, get) => ({
     if (isNowDone) {
       sounds.playTaskComplete();
       triggerHaptic('success');
-      confetti({
-        particleCount: 45,
-        spread: 60,
-        origin: { y: 0.85 },
-        colors: ['#3b82f6', '#10b981', '#6366f1', '#fbbf24'],
-        disableForReducedMotion: true,
-      });
+      
+      const newDaysCompleted = (target.habitDaysCompleted || 0) + 1;
+      const newStreak = (target.habitStreak || 0) + 1;
+      const isHabit = !!target.habitDaysTotal || target.recurrence === 'daily';
+      const isGoalReached = target.habitDaysTotal ? newDaysCompleted >= target.habitDaysTotal : false;
 
-      // Handle recurrence if recurring task is marked done:
-      // Create next occurrence without corrupting the historical completed task!
-      if (target.recurrence && target.recurrence !== 'none') {
+      if (isGoalReached) {
+        // Grand celebration for challenge completion
+        confetti({
+          particleCount: 120,
+          spread: 90,
+          origin: { y: 0.7 },
+          colors: ['#059669', '#10b981', '#34d399', '#f59e0b', '#fbbf24'],
+        });
+      } else {
+        confetti({
+          particleCount: 45,
+          spread: 60,
+          origin: { y: 0.85 },
+          colors: ['#059669', '#10b981', '#0d9488', '#fbbf24'],
+          disableForReducedMotion: true,
+        });
+      }
+
+      // Handle recurrence / multi-day habit challenge:
+      // If recurring and hasn't exceeded total days, create next day occurrence!
+      if (target.recurrence && target.recurrence !== 'none' && !isGoalReached) {
         const nextDue = new Date(target.dueAt || Date.now());
         if (target.recurrence === 'daily') {
           nextDue.setDate(nextDue.getDate() + 1);
@@ -407,6 +428,19 @@ export const useAppStore = create<AppState>((set, get) => ({
           nextDue.setMonth(nextDue.getMonth() + 1);
         }
 
+        // Keep explicit daily time if specified
+        if (target.habitTimeOfDay) {
+          const [h, m] = target.habitTimeOfDay.split(':').map(Number);
+          if (!isNaN(h) && !isNaN(m)) {
+            nextDue.setHours(h, m, 0, 0);
+          }
+        }
+
+        // Calculate next reminder
+        const nextRemindAt = target.reminderMinutesBefore !== null && target.reminderMinutesBefore !== undefined
+          ? nextDue.getTime() - (target.reminderMinutesBefore * 60 * 1000)
+          : null;
+
         // Add next recurring instance
         const now = Date.now();
         const nextTask: Task = {
@@ -415,7 +449,13 @@ export const useAppStore = create<AppState>((set, get) => ({
           status: 'todo',
           completedAt: null,
           dueAt: nextDue.getTime(),
+          remindAt: nextRemindAt,
           spentMinutes: 0,
+          habitDaysTotal: target.habitDaysTotal || null,
+          habitDaysCompleted: newDaysCompleted,
+          habitStreak: newStreak,
+          habitTimeOfDay: target.habitTimeOfDay || null,
+          reminderMinutesBefore: target.reminderMinutesBefore ?? null,
           subtasks: target.subtasks.map((s) => ({ ...s, isDone: false })),
           createdAt: now,
           updatedAt: now,
@@ -423,27 +463,59 @@ export const useAppStore = create<AppState>((set, get) => ({
         await db.tasks.add(nextTask);
         set({ tasks: [nextTask, ...get().tasks] });
       }
+
+      await updateTask(taskId, { 
+        status: newStatus, 
+        completedAt,
+        habitDaysCompleted: newDaysCompleted,
+        habitStreak: newStreak 
+      });
+
+      // Customized Persian celebratory feedback
+      let toastMessage = 'تسک با موفقیت انجام شد ✨';
+      if (isGoalReached) {
+        toastMessage = `🏆 تبریک! چالش ${target.habitDaysTotal} روزه «${target.title.slice(0, 20)}» با موفقیت تکمیل شد!`;
+      } else if (target.habitDaysTotal) {
+        toastMessage = `🔥 روز ${newDaysCompleted} از ${target.habitDaysTotal} ثبت شد! تسک فردا خودکار آماده است.`;
+      } else if (target.recurrence === 'daily') {
+        toastMessage = `✨ تسک امروز تکمیل شد (استریک: ${newStreak} روز)؛ تسک فردا خودکار ثبت شد.`;
+      }
+
+      // Set 5-second undo toast
+      set({
+        undoAction: {
+          id: `undo_toggle_${taskId}`,
+          message: toastMessage,
+          timestamp: Date.now(),
+          undo: async () => {
+            await updateTask(taskId, {
+              status: target.status,
+              completedAt: target.completedAt,
+              habitDaysCompleted: target.habitDaysCompleted,
+              habitStreak: target.habitStreak,
+            });
+          },
+        },
+      });
     } else {
       sounds.playPop();
       triggerHaptic('light');
-    }
+      await updateTask(taskId, { status: newStatus, completedAt });
 
-    await updateTask(taskId, { status: newStatus, completedAt });
-
-    // Set 5-second undo toast
-    set({
-      undoAction: {
-        id: `undo_toggle_${taskId}`,
-        message: isNowDone ? 'تسک با موفقیت انجام شد ✨' : 'تسک به حالت انجام‌نشده برگشت',
-        timestamp: Date.now(),
-        undo: async () => {
-          await updateTask(taskId, {
-            status: target.status,
-            completedAt: target.completedAt,
-          });
+      set({
+        undoAction: {
+          id: `undo_toggle_${taskId}`,
+          message: 'تسک به حالت انجام‌نشده برگشت',
+          timestamp: Date.now(),
+          undo: async () => {
+            await updateTask(taskId, {
+              status: target.status,
+              completedAt: target.completedAt,
+            });
+          },
         },
-      },
-    });
+      });
+    }
   },
 
   toggleSubtask: async (taskId, subtaskId) => {

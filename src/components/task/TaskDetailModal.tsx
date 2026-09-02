@@ -27,7 +27,9 @@ import {
   CheckSquare, 
   Square as SquareEmpty, 
   FileText, 
-  AlertTriangle 
+  AlertTriangle,
+  Flame,
+  Bell 
 } from 'lucide-react';
 
 export const TaskDetailModal: React.FC = () => {
@@ -309,6 +311,159 @@ export const TaskDetailModal: React.FC = () => {
                 </button>
               )}
             </div>
+          </div>
+
+          {/* 🎯 Habit Challenge & Daily Routine (N Days Goal & Custom Reminders) */}
+          <div className="bg-emerald-50/50 dark:bg-emerald-950/20 rounded-2xl p-3.5 sm:p-4 border border-emerald-200/90 dark:border-emerald-800/40 space-y-3.5">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-xs">
+                  <Flame className="w-4 h-4 fill-current" />
+                </div>
+                <div>
+                  <h4 className="text-xs sm:text-sm font-black text-emerald-950 dark:text-emerald-200">چالش و روتین روزانه (عادت‌ساز)</h4>
+                  <p className="text-[11px] text-emerald-700/80 dark:text-emerald-400 font-medium">تعیین تعداد روزهای ثابت (مثلاً ۴۰ روز)، ساعت مقرر و یادآوری</p>
+                </div>
+              </div>
+
+              {task.habitDaysTotal ? (
+                <button
+                  type="button"
+                  onClick={() => updateTask(task.id, { habitDaysTotal: null, recurrence: 'none' })}
+                  className="text-[11px] text-rose-600 hover:text-rose-700 dark:text-rose-400 hover:underline cursor-pointer font-bold"
+                >
+                  لغو چالش
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => updateTask(task.id, { habitDaysTotal: 40, recurrence: 'daily', habitTimeOfDay: '18:00', reminderMinutesBefore: 15 })}
+                  className="px-3 py-1 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-xs cursor-pointer"
+                >
+                  فعال‌سازی چالش ۴۰ روزه
+                </button>
+              )}
+            </div>
+
+            {task.habitDaysTotal && (
+              <div className="space-y-3 pt-1">
+                {/* Progress Stats & Bar */}
+                <div className="bg-white/80 dark:bg-slate-900/80 p-3 rounded-xl border border-emerald-200 dark:border-emerald-800/60 space-y-2">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-bold text-gray-800 dark:text-slate-200 flex items-center gap-1.5">
+                      <span>پیشرفت چالش:</span>
+                      <span className="text-emerald-700 dark:text-emerald-400 font-black">
+                        روز {toPersianDigits(task.habitDaysCompleted || 0)} از {toPersianDigits(task.habitDaysTotal)}
+                      </span>
+                    </span>
+                    <span className="text-[11px] font-extrabold text-emerald-700 dark:text-emerald-300">
+                      {toPersianDigits(Math.min(100, Math.round(((task.habitDaysCompleted || 0) / task.habitDaysTotal) * 100)))}٪
+                    </span>
+                  </div>
+
+                  {/* Visual Progress Line */}
+                  <div className="w-full h-2.5 bg-gray-100 dark:bg-slate-800 rounded-full overflow-hidden p-0.5 border border-emerald-200/50 dark:border-emerald-900/40">
+                    <div
+                      className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full transition-all duration-500 shadow-xs"
+                      style={{ width: `${Math.min(100, ((task.habitDaysCompleted || 0) / task.habitDaysTotal) * 100)}%` }}
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-between text-[11px] text-gray-500 dark:text-slate-400 pt-0.5">
+                    <span>🔥 استریک پیوسته: {toPersianDigits(task.habitStreak || 0)} روز</span>
+                    <span>{toPersianDigits(Math.max(0, task.habitDaysTotal - (task.habitDaysCompleted || 0)))} روز تا اتمام هدف باقی‌مانده</span>
+                  </div>
+                </div>
+
+                {/* Preset Days & Custom Days */}
+                <div className="space-y-1.5">
+                  <label className="text-[11px] font-bold text-gray-700 dark:text-slate-300">انتخاب دوره چالش:</label>
+                  <div className="flex flex-wrap items-center gap-1.5 text-xs">
+                    {[21, 30, 40, 66, 100].map((days) => (
+                      <button
+                        key={days}
+                        type="button"
+                        onClick={() => updateTask(task.id, { habitDaysTotal: days, recurrence: 'daily' })}
+                        className={`px-3 py-1.5 rounded-xl font-bold transition cursor-pointer border ${
+                          task.habitDaysTotal === days
+                            ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs'
+                            : 'bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-300 border-gray-200 dark:border-slate-700 hover:border-emerald-400'
+                        }`}
+                      >
+                        {toPersianDigits(days)} روزه
+                      </button>
+                    ))}
+
+                    <div className="flex items-center gap-1.5 bg-white dark:bg-slate-800 px-2.5 py-1 rounded-xl border border-gray-200 dark:border-slate-700">
+                      <span className="text-[11px] text-gray-500 dark:text-slate-400">تعداد دلخواه:</span>
+                      <input
+                        type="number"
+                        min="1"
+                        max="365"
+                        value={task.habitDaysTotal || ''}
+                        onChange={(e) => {
+                          const val = parseInt(e.target.value, 10);
+                          if (!isNaN(val) && val > 0) {
+                            updateTask(task.id, { habitDaysTotal: val, recurrence: 'daily' });
+                          }
+                        }}
+                        className="w-12 bg-transparent text-xs font-bold text-gray-900 dark:text-white focus:outline-none text-center"
+                      />
+                      <span className="text-[11px] text-gray-500 dark:text-slate-400">روز</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Daily Time & Reminder Pickers */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                  {/* Daily Scheduled Time */}
+                  <div className="bg-white dark:bg-slate-900/80 p-2.5 rounded-xl border border-emerald-200 dark:border-slate-800 flex items-center justify-between gap-2">
+                    <span className="text-xs font-semibold text-gray-700 dark:text-slate-300 flex items-center gap-1.5">
+                      <Clock className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                      <span>ساعت مقرر روزانه:</span>
+                    </span>
+                    <input
+                      type="time"
+                      value={task.habitTimeOfDay || '18:00'}
+                      onChange={(e) => {
+                        const newTime = e.target.value;
+                        const [h, m] = newTime.split(':').map(Number);
+                        const d = new Date(task.dueAt || Date.now());
+                        if (!isNaN(h) && !isNaN(m)) {
+                          d.setHours(h, m, 0, 0);
+                        }
+                        updateTask(task.id, { habitTimeOfDay: newTime, dueAt: d.getTime() });
+                      }}
+                      className="bg-gray-100 dark:bg-slate-800 text-xs font-bold text-gray-900 dark:text-white px-2 py-1 rounded-lg border border-gray-200 dark:border-slate-700 focus:outline-none cursor-pointer"
+                    />
+                  </div>
+
+                  {/* Reminder Time */}
+                  <div className="bg-white dark:bg-slate-900/80 p-2.5 rounded-xl border border-emerald-200 dark:border-slate-800 flex items-center justify-between gap-2">
+                    <span className="text-xs font-semibold text-gray-700 dark:text-slate-300 flex items-center gap-1.5">
+                      <AlertCircle className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                      <span>میزان یادآوری:</span>
+                    </span>
+                    <select
+                      value={task.reminderMinutesBefore !== null && task.reminderMinutesBefore !== undefined ? task.reminderMinutesBefore : ''}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        const mins = val === '' ? null : parseInt(val, 10);
+                        updateTask(task.id, { reminderMinutesBefore: mins });
+                      }}
+                      className="bg-gray-100 dark:bg-slate-800 text-xs font-bold text-gray-900 dark:text-white px-2 py-1 rounded-lg border border-gray-200 dark:border-slate-700 focus:outline-none cursor-pointer"
+                    >
+                      <option value="0">سر ساعت مقرر</option>
+                      <option value="5">۵ دقیقه قبل</option>
+                      <option value="15">۱۵ دقیقه قبل</option>
+                      <option value="30">۳۰ دقیقه قبل</option>
+                      <option value="60">۱ ساعت قبل</option>
+                      <option value="">بدون یادآوری</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Time Tracking & Focus */}

@@ -19,6 +19,28 @@ export function parseNaturalPersianTask(inputText: string): NaturalParsedResult 
   const normText = toEnglishDigits(text);
   const extractedText: NaturalParsedResult['extractedText'] = {};
   let confidenceScore = 0;
+  let habitDaysTotal: number | null = null;
+  let recurrence: 'none' | 'daily' | 'weekly' | 'weekdays' | 'monthly' | 'custom' | undefined = undefined;
+
+  // 0. Extract Habit / Multi-Day Challenge (e.g. چالش ۴۰ روزه, ۴۰ روز, ۳۰ روزه, ۲۱ روز, هر روز)
+  const habitMatch = normText.match(/(?:چالش|عادت|دوره|برنامه)?\s*(\d+)\s*(?:روزه|روز)\s*(?:متوالی|پیاپی|هر\s*روز)?/i)
+    || normText.match(/هر\s*روز\s*(?:برای)?\s*(\d+)\s*روز/i);
+
+  if (habitMatch) {
+    const days = parseInt(habitMatch[1], 10);
+    if (days > 1 && days <= 365) {
+      habitDaysTotal = days;
+      recurrence = 'daily';
+      text = text.replace(habitMatch[0], '');
+      extractedText.habitStr = `چالش ${days} روزه`;
+      confidenceScore += 35;
+    }
+  } else if (/هر\s*روز|روزانه|daily/i.test(normText)) {
+    recurrence = 'daily';
+    text = text.replace(/هر\s*روز|روزانه|daily/gi, '');
+    extractedText.habitStr = 'تکرار روزانه';
+    confidenceScore += 20;
+  }
 
   // 1. Extract Tags (e.g. #کاری #شخصی #توسعه)
   const tags: string[] = [];
@@ -184,6 +206,11 @@ export function parseNaturalPersianTask(inputText: string): NaturalParsedResult 
     .replace(/\s+/g, ' ')
     .trim();
 
+  // Habit Time of Day string format
+  const habitTimeOfDay = hasExplicitTime 
+    ? `${String(parsedHour).padStart(2, '0')}:${String(parsedMinute).padStart(2, '0')}`
+    : (habitDaysTotal ? '18:00' : null);
+
   return {
     title: cleanTitle || inputText,
     dueAt,
@@ -191,6 +218,10 @@ export function parseNaturalPersianTask(inputText: string): NaturalParsedResult 
     priority,
     tags,
     confidence: Math.min(100, confidenceScore),
+    habitDaysTotal: habitDaysTotal ?? (recurrence === 'daily' ? null : undefined),
+    habitTimeOfDay,
+    recurrence: recurrence || (habitDaysTotal ? 'daily' : 'none'),
+    reminderMinutesBefore: hasExplicitTime || habitDaysTotal ? 15 : null,
     extractedText,
   };
 }

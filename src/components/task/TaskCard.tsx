@@ -12,7 +12,9 @@ import {
   ListChecks, 
   Sparkles,
   ChevronLeft,
-  AlertTriangle
+  AlertTriangle,
+  Flame,
+  Bell
 } from 'lucide-react';
 
 interface TaskCardProps {
@@ -100,6 +102,48 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, compact = false }) => 
             <p className="text-xs text-gray-500 dark:text-slate-400 line-clamp-2 mt-1 font-normal leading-[1.65]">
               {task.description}
             </p>
+          )}
+
+          {/* 🎯 Habit Challenge Progress Bar & Streak */}
+          {task.habitDaysTotal && (
+            <div className="mt-2 p-2 rounded-xl bg-emerald-50/60 dark:bg-emerald-950/30 border border-emerald-200/70 dark:border-emerald-800/40 text-[11px] space-y-1.5">
+              <div className="flex items-center justify-between text-emerald-900 dark:text-emerald-200 font-bold">
+                <span className="flex items-center gap-1">
+                  <Flame className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 fill-current" />
+                  <span>چالش {toPersianDigits(task.habitDaysTotal)} روزه</span>
+                  <span className="text-gray-500 dark:text-slate-400 font-normal">
+                    (روز {toPersianDigits(task.habitDaysCompleted || 0)})
+                  </span>
+                </span>
+                <span className="text-emerald-700 dark:text-emerald-300 font-black">
+                  {toPersianDigits(Math.min(100, Math.round(((task.habitDaysCompleted || 0) / task.habitDaysTotal) * 100)))}٪
+                </span>
+              </div>
+
+              {/* Progress track */}
+              <div className="w-full h-1.5 bg-gray-200/80 dark:bg-slate-800 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-emerald-600 dark:bg-emerald-400 rounded-full transition-all"
+                  style={{ width: `${Math.min(100, ((task.habitDaysCompleted || 0) / task.habitDaysTotal) * 100)}%` }}
+                />
+              </div>
+
+              {/* Time & Streak meta */}
+              <div className="flex items-center justify-between text-[10px] text-gray-500 dark:text-slate-400">
+                {task.habitTimeOfDay && (
+                  <span className="flex items-center gap-0.5 text-emerald-800 dark:text-emerald-300 font-semibold">
+                    <Clock className="w-2.5 h-2.5" />
+                    <span>ساعت {toPersianDigits(task.habitTimeOfDay)}</span>
+                    {task.reminderMinutesBefore !== null && task.reminderMinutesBefore !== undefined && (
+                      <span className="text-gray-400 dark:text-slate-500 font-normal">
+                        ({task.reminderMinutesBefore === 0 ? 'سر ساعت' : `${toPersianDigits(task.reminderMinutesBefore)}د قبل`})
+                      </span>
+                    )}
+                  </span>
+                )}
+                <span>🔥 استریک: {toPersianDigits(task.habitStreak || 0)} روز</span>
+              </div>
+            </div>
           )}
 
           {/* Subtasks Progress */}
