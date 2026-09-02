@@ -13,20 +13,61 @@
   body {
     font-feature-settings: "ss01" 1, "ss02" 1, "cv01" 1;
     touch-action: manipulation;
-    background-color: #F9FAFB;
-    color: #1E293B;
+    background-color: #F8FAFC;
+    color: #0F172A;
+    line-height: 1.7;
+    letter-spacing: -0.015em;
   }
 
   .dark body {
-    background-color: #0F172A;
-    color: #F8FAFC;
+    background-color: #0B131E;
+    color: #F1F5F9;
   }
+
+  /* Headings typography */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-vazir);
+    font-weight: 700;
+    line-height: 1.4;
+  }
+}
+
+/* Persian Typographic Weight Standards */
+.font-light {
+  font-weight: 300 !important;
+}
+
+.font-normal {
+  font-weight: 400 !important;
+}
+
+.font-medium {
+  font-weight: 500 !important;
+}
+
+.font-semibold {
+  font-weight: 600 !important;
+}
+
+.font-bold {
+  font-weight: 700 !important;
+}
+
+.font-black {
+  font-weight: 900 !important;
+}
+
+/* Long text readability for task descriptions and notes */
+.persian-reading {
+  line-height: 1.85 !important;
+  letter-spacing: -0.01em;
+  font-size: 0.875rem;
 }
 
 /* Custom sleek scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -34,12 +75,12 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.25);
+  background: rgba(16, 185, 129, 0.2);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(148, 163, 184, 0.45);
+  background: rgba(16, 185, 129, 0.4);
 }
 
 /* iOS Safe Areas */
@@ -57,16 +98,16 @@
   cursor: grabbing !important;
 }
 
-/* Subtle executive panels */
+/* Subtle soft emerald cards */
 .polish-card {
   background-color: #FFFFFF;
-  border: 1px solid #E5E7EB;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
 }
 
 .dark .polish-card {
-  background-color: #1E293B;
-  border-color: #334155;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+  background-color: #131F2E;
+  border-color: #1E293B;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.25);
 }
 

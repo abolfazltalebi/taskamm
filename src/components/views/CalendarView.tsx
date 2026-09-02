@@ -101,16 +101,16 @@ export const CalendarView: React.FC = () => {
   return (
     <div id="calendar-view-container" className="space-y-6">
       {/* Calendar Navigation & Month Header */}
-      <div className="flex items-center justify-between bg-white dark:bg-slate-900/70 p-4 sm:p-5 rounded-3xl border border-gray-200/90 dark:border-slate-800 shadow-2xs">
+      <div className="flex items-center justify-between bg-white dark:bg-[#131F2E] p-4 sm:p-5 rounded-3xl border border-gray-200/90 dark:border-slate-800 shadow-2xs">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-indigo-50 dark:bg-indigo-600/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center border border-indigo-100 dark:border-indigo-500/30">
+          <div className="w-9 h-9 rounded-xl bg-emerald-50 dark:bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 flex items-center justify-center border border-emerald-200/70 dark:border-emerald-500/30">
             <CalendarIcon className="w-5 h-5" />
           </div>
           <div>
             <h2 className="text-base sm:text-lg font-black text-gray-900 dark:text-white">
               {monthNames[currentMonth - 1]} {toPersianDigits(currentYear)}
             </h2>
-            <p className="text-[11px] text-gray-500 dark:text-slate-400">تقویم هجری شمسی</p>
+            <p className="text-[11px] text-gray-500 dark:text-slate-400 font-medium">تقویم هجری شمسی</p>
           </div>
         </div>
 
@@ -121,7 +121,7 @@ export const CalendarView: React.FC = () => {
               setCurrentMonth(nowJalali.jm);
               setSelectedDay(nowJalali.jd);
             }}
-            className="px-3 py-1.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-xs text-gray-700 font-semibold dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 transition cursor-pointer"
+            className="px-3 py-1.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-xs text-gray-800 font-bold dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition cursor-pointer"
           >
             امروز
           </button>
@@ -143,7 +143,7 @@ export const CalendarView: React.FC = () => {
       </div>
 
       {/* Calendar Grid Matrix */}
-      <div className="bg-white dark:bg-slate-900/80 rounded-3xl border border-gray-200/90 dark:border-slate-800 p-3 sm:p-5 shadow-2xs">
+      <div className="bg-white dark:bg-[#131F2E] rounded-3xl border border-gray-200/90 dark:border-slate-800 p-3 sm:p-5 shadow-2xs">
         {/* Week Day Header */}
         <div className="grid grid-cols-7 gap-1 text-center font-bold text-xs text-gray-500 dark:text-slate-400 pb-3 border-b border-gray-100 dark:border-slate-800 mb-2">
           {weekDayNames.map((dayName, idx) => (
@@ -183,26 +183,26 @@ export const CalendarView: React.FC = () => {
                 onClick={() => setSelectedDay(dayNum)}
                 className={`h-14 sm:h-20 rounded-2xl p-1.5 sm:p-2 flex flex-col justify-between items-start transition-all cursor-pointer border text-start relative ${
                   isSelected
-                    ? 'bg-indigo-50 border-indigo-600 dark:bg-indigo-600/30 dark:border-indigo-500 shadow-2xs'
+                    ? 'bg-emerald-50 border-emerald-600 dark:bg-emerald-950/40 dark:border-emerald-500 shadow-2xs'
                     : isToday
-                    ? 'bg-indigo-50/40 border-indigo-300 dark:bg-slate-800/90 dark:border-indigo-500/50 hover:border-indigo-400'
-                    : 'bg-white hover:bg-gray-50 border-gray-100 hover:border-gray-200 dark:bg-slate-950/50 dark:hover:bg-slate-800/60 dark:border-slate-800/80'
+                    ? 'bg-emerald-50/40 border-emerald-300 dark:bg-slate-800/90 dark:border-emerald-500/50 hover:border-emerald-400'
+                    : 'bg-white hover:bg-gray-50 border-gray-100 hover:border-gray-200 dark:bg-[#0B131E]/60 dark:hover:bg-slate-800/60 dark:border-slate-800/80'
                 }`}
               >
                 <div className="w-full flex items-center justify-between">
                   <span
                     className={`text-xs sm:text-sm font-black ${
                       isSelected
-                        ? 'text-indigo-700 dark:text-indigo-300'
+                        ? 'text-emerald-800 dark:text-emerald-300'
                         : isToday
-                        ? 'text-indigo-600 dark:text-indigo-400 font-bold'
+                        ? 'text-emerald-700 dark:text-emerald-400 font-bold'
                         : 'text-gray-800 dark:text-slate-300'
                     }`}
                   >
                     {toPersianDigits(dayNum)}
                   </span>
                   {isToday && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 dark:bg-indigo-400" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 dark:bg-emerald-400" />
                   )}
                 </div>
 
@@ -217,7 +217,7 @@ export const CalendarView: React.FC = () => {
                             ? 'bg-emerald-500'
                             : t.priority === 'urgent'
                             ? 'bg-rose-500'
-                            : 'bg-indigo-600'
+                            : 'bg-emerald-600'
                         }`}
                       />
                     ))}
@@ -233,13 +233,13 @@ export const CalendarView: React.FC = () => {
       </div>
 
       {/* Selected Day Task Drawer / Section */}
-      <div className="rounded-3xl bg-white dark:bg-slate-900/80 border border-gray-200/90 dark:border-slate-800 p-4 sm:p-6 space-y-4 shadow-2xs">
+      <div className="rounded-3xl bg-white dark:bg-[#131F2E] border border-gray-200/90 dark:border-slate-800 p-4 sm:p-6 space-y-4 shadow-2xs">
         <div className="flex items-center justify-between border-b border-gray-100 dark:border-slate-800 pb-3">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-bold text-gray-900 dark:text-white">
+            <span className="text-sm font-black text-gray-900 dark:text-white">
               کارهای {toPersianDigits(selectedDay)} {monthNames[currentMonth - 1]}
             </span>
-            <span className="text-xs text-gray-500 dark:text-slate-400">
+            <span className="text-xs text-gray-500 dark:text-slate-400 font-medium">
               ({toPersianDigits(selectedDayTasks.length)} تسک)
             </span>
           </div>
@@ -252,12 +252,12 @@ export const CalendarView: React.FC = () => {
             placeholder={`افزودن تسک برای ${toPersianDigits(selectedDay)} ${monthNames[currentMonth - 1]}...`}
             value={quickDayTaskTitle}
             onChange={(e) => setQuickDayTaskTitle(e.target.value)}
-            className="flex-1 bg-gray-50 dark:bg-slate-800/80 border border-gray-200 dark:border-slate-700 rounded-2xl px-4 py-2.5 text-xs text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            className="flex-1 bg-gray-50 dark:bg-slate-800/80 border border-gray-200 dark:border-slate-700 rounded-2xl px-4 py-2.5 text-xs text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 font-medium"
           />
           <button
             type="submit"
             disabled={!quickDayTaskTitle.trim()}
-            className="px-4 py-2.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-xs font-semibold text-white disabled:opacity-40 flex items-center gap-1.5 cursor-pointer shadow-xs"
+            className="px-4 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-xs font-bold text-white disabled:opacity-40 flex items-center gap-1.5 cursor-pointer shadow-xs"
           >
             <Plus className="w-4 h-4" />
             <span>ثبت</span>

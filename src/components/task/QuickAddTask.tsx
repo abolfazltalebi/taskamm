@@ -103,16 +103,16 @@ export const QuickAddTask: React.FC<QuickAddTaskProps> = ({
   return (
     <div 
       id="quick-add-task-container"
-      className={`${inline ? 'w-full' : 'w-full max-w-2xl mx-auto rounded-3xl bg-white dark:bg-slate-900 backdrop-blur-2xl border border-gray-200/90 dark:border-slate-700/80 shadow-2xl p-4 sm:p-5 text-[#1E293B] dark:text-slate-100 transition-colors'}`}
+      className={`${inline ? 'w-full' : 'w-full max-w-2xl mx-auto rounded-3xl bg-white dark:bg-[#131F2E] backdrop-blur-2xl border border-gray-200/90 dark:border-slate-800 shadow-2xl p-4 sm:p-5 text-gray-900 dark:text-slate-100 transition-colors'}`}
     >
       <div className="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-slate-800/80 mb-3">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-600/20 text-indigo-700 dark:text-indigo-400 flex items-center justify-center border border-indigo-100 dark:border-indigo-500/30">
+          <div className="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 flex items-center justify-center border border-emerald-200/70 dark:border-emerald-500/30">
             <Plus className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-gray-900 dark:text-white">ثبت سریع تسک</h3>
-            <p className="text-[11px] text-gray-500 dark:text-slate-400">به فارسی تایپ کنید؛ تاریخ، زمان و اولویت خودکار شناسایی می‌شوند</p>
+            <h3 className="text-sm font-black text-gray-900 dark:text-white">ثبت سریع تسک</h3>
+            <p className="text-[11px] text-gray-500 dark:text-slate-400 font-medium">به فارسی بنویسید؛ زمان، تخمین و اولویت هوشمند استخراج می‌شوند</p>
           </div>
         </div>
 
@@ -137,12 +137,12 @@ export const QuickAddTask: React.FC<QuickAddTaskProps> = ({
             onChange={(e) => setInputText(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="مثال: فردا ساعت ۱۸ گزارش عملکرد ۳ ساعت #کاری !فوری"
-            className="w-full rounded-2xl bg-gray-50/80 dark:bg-slate-800/80 border border-gray-200 dark:border-slate-700 px-4 py-3.5 pe-12 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-600 dark:focus:border-indigo-500 transition shadow-inner"
+            className="w-full rounded-2xl bg-gray-50/80 dark:bg-[#0B131E] border border-gray-200 dark:border-slate-700 px-4 py-3 pe-12 text-xs sm:text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-600 dark:focus:border-emerald-500 transition font-medium"
           />
           <button
             type="submit"
             disabled={!inputText.trim()}
-            className="absolute end-2 top-1/2 -translate-y-1/2 p-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white disabled:opacity-30 disabled:pointer-events-none transition shadow cursor-pointer"
+            className="absolute end-2 top-1/2 -translate-y-1/2 p-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white disabled:opacity-30 disabled:pointer-events-none transition shadow-xs cursor-pointer"
             title="افزودن (Enter)"
           >
             <CornerDownLeft className="w-4 h-4" />
@@ -151,26 +151,26 @@ export const QuickAddTask: React.FC<QuickAddTaskProps> = ({
 
         {/* Real-time Natural Language Extracted Preview Pills */}
         {inputText.trim() && parsed.confidence > 0 && (
-          <div className="flex items-center gap-2 p-2 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-500/20 text-[11px] text-indigo-900 dark:text-indigo-200 overflow-x-auto">
-            <Sparkles className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 shrink-0" />
-            <span className="shrink-0 font-medium">شناسایی هوشمند:</span>
+          <div className="flex items-center gap-2 p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/70 dark:border-emerald-500/30 text-[11px] text-emerald-900 dark:text-emerald-200 overflow-x-auto no-scrollbar">
+            <Sparkles className="w-3.5 h-3.5 text-emerald-700 dark:text-emerald-400 shrink-0" />
+            <span className="shrink-0 font-bold">شناسایی هوشمند:</span>
             {parsed.extractedText.dateStr && (
-              <span className="px-2 py-0.5 rounded-md bg-white dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-500/30 shrink-0 shadow-2xs">
+              <span className="px-2 py-0.5 rounded-md bg-white dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-200 border border-emerald-200 dark:border-emerald-600/40 shrink-0 shadow-2xs font-medium">
                 📅 {parsed.extractedText.dateStr} {parsed.extractedText.timeStr || ''}
               </span>
             )}
             {parsed.extractedText.estimateStr && (
-              <span className="px-2 py-0.5 rounded-md bg-white dark:bg-sky-500/20 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-500/30 shrink-0 shadow-2xs">
+              <span className="px-2 py-0.5 rounded-md bg-white dark:bg-teal-900/60 text-teal-800 dark:text-teal-200 border border-teal-200 dark:border-teal-600/40 shrink-0 shadow-2xs font-medium">
                 ⏱️ تخمین: {parsed.extractedText.estimateStr}
               </span>
             )}
             {parsed.extractedText.priorityStr && (
-              <span className="px-2 py-0.5 rounded-md bg-white dark:bg-rose-500/20 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-500/30 shrink-0 shadow-2xs">
+              <span className="px-2 py-0.5 rounded-md bg-white dark:bg-rose-900/60 text-rose-800 dark:text-rose-200 border border-rose-200 dark:border-rose-600/40 shrink-0 shadow-2xs font-medium">
                 🚨 اولویت: {parsed.extractedText.priorityStr}
               </span>
             )}
             {parsed.extractedText.tagStr && (
-              <span className="px-2 py-0.5 rounded-md bg-white dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 shrink-0 shadow-2xs">
+              <span className="px-2 py-0.5 rounded-md bg-white dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-200 border border-emerald-200 dark:border-emerald-600/40 shrink-0 shadow-2xs font-medium">
                 🏷️ {parsed.extractedText.tagStr}
               </span>
             )}
@@ -187,8 +187,8 @@ export const QuickAddTask: React.FC<QuickAddTaskProps> = ({
               onClick={() => setQuickDate(0, 18)}
               className={`px-2 py-1 rounded-lg text-[11px] transition cursor-pointer ${
                 finalDueDate && new Date(finalDueDate).toDateString() === new Date().toDateString()
-                  ? 'bg-indigo-600 text-white font-medium'
-                  : 'text-gray-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700'
+                  ? 'bg-emerald-600 text-white font-bold'
+                  : 'text-gray-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 font-medium'
               }`}
             >
               امروز
@@ -198,8 +198,8 @@ export const QuickAddTask: React.FC<QuickAddTaskProps> = ({
               onClick={() => setQuickDate(1, 18)}
               className={`px-2 py-1 rounded-lg text-[11px] transition cursor-pointer ${
                 finalDueDate && new Date(finalDueDate).toDateString() === new Date(Date.now() + 86400000).toDateString()
-                  ? 'bg-indigo-600 text-white font-medium'
-                  : 'text-gray-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700'
+                  ? 'bg-emerald-600 text-white font-bold'
+                  : 'text-gray-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 font-medium'
               }`}
             >
               فردا
@@ -207,7 +207,7 @@ export const QuickAddTask: React.FC<QuickAddTaskProps> = ({
             <button
               type="button"
               onClick={() => setQuickDate(7, 18)}
-              className="px-2 py-1 rounded-lg text-[11px] text-gray-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 transition cursor-pointer"
+              className="px-2 py-1 rounded-lg text-[11px] text-gray-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 transition cursor-pointer font-medium"
             >
               هفته بعد
             </button>
@@ -223,8 +223,8 @@ export const QuickAddTask: React.FC<QuickAddTaskProps> = ({
                 onClick={() => setManualEstimate(mins)}
                 className={`px-2 py-1 rounded-lg text-[11px] transition cursor-pointer ${
                   finalEstimate === mins
-                    ? 'bg-sky-600 text-white font-medium'
-                    : 'text-gray-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700'
+                    ? 'bg-emerald-700 text-white font-bold'
+                    : 'text-gray-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 font-medium'
                 }`}
               >
                 {mins === 60 ? '۱س' : mins === 120 ? '۲س' : `${toPersianDigits(mins)}د`}
@@ -240,8 +240,8 @@ export const QuickAddTask: React.FC<QuickAddTaskProps> = ({
               onClick={() => setManualPriority('urgent')}
               className={`px-2 py-1 rounded-lg text-[11px] transition cursor-pointer ${
                 finalPriority === 'urgent'
-                  ? 'bg-rose-600 text-white font-medium'
-                  : 'text-gray-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700'
+                  ? 'bg-rose-600 text-white font-bold'
+                  : 'text-gray-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 font-medium'
               }`}
             >
               فوری
@@ -251,8 +251,8 @@ export const QuickAddTask: React.FC<QuickAddTaskProps> = ({
               onClick={() => setManualPriority('high')}
               className={`px-2 py-1 rounded-lg text-[11px] transition cursor-pointer ${
                 finalPriority === 'high'
-                  ? 'bg-amber-600 text-white font-medium'
-                  : 'text-gray-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700'
+                  ? 'bg-amber-600 text-white font-bold'
+                  : 'text-gray-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 font-medium'
               }`}
             >
               مهم
@@ -261,14 +261,14 @@ export const QuickAddTask: React.FC<QuickAddTaskProps> = ({
         </div>
 
         {/* Board & List Selector */}
-        <div className="flex items-center justify-between gap-3 pt-2 text-xs border-t border-gray-100 dark:border-slate-800/80">
-          <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center justify-between gap-2.5 pt-2 text-xs border-t border-gray-100 dark:border-slate-800/80">
+          <div className="flex flex-wrap items-center gap-2">
             <div className="flex items-center gap-1.5 bg-gray-100/90 dark:bg-slate-800/80 px-2.5 py-1.5 rounded-xl border border-gray-200 dark:border-slate-700">
               <Layers className="w-3.5 h-3.5 text-gray-500 dark:text-slate-400" />
               <select
                 value={selectedBoardId}
                 onChange={(e) => setSelectedBoardId(e.target.value)}
-                className="bg-transparent text-gray-800 dark:text-slate-200 text-xs focus:outline-none cursor-pointer"
+                className="bg-transparent text-gray-800 dark:text-slate-200 text-xs font-semibold focus:outline-none cursor-pointer"
               >
                 {boards.map((b) => (
                   <option key={b.id} value={b.id} className="bg-white dark:bg-slate-900 text-gray-900 dark:text-white">
@@ -283,7 +283,7 @@ export const QuickAddTask: React.FC<QuickAddTaskProps> = ({
                 <select
                   value={selectedListId}
                   onChange={(e) => setSelectedListId(e.target.value)}
-                  className="bg-transparent text-gray-800 dark:text-slate-200 text-xs focus:outline-none cursor-pointer"
+                  className="bg-transparent text-gray-800 dark:text-slate-200 text-xs font-semibold focus:outline-none cursor-pointer"
                 >
                   {currentBoardLists.map((l) => (
                     <option key={l.id} value={l.id} className="bg-white dark:bg-slate-900 text-gray-900 dark:text-white">
@@ -299,7 +299,7 @@ export const QuickAddTask: React.FC<QuickAddTaskProps> = ({
             type="button"
             onClick={() => handleSubmit()}
             disabled={!inputText.trim()}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-semibold text-xs shadow-xs transition disabled:opacity-40 disabled:pointer-events-none cursor-pointer"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-xs shadow-xs transition disabled:opacity-40 disabled:pointer-events-none cursor-pointer ms-auto"
           >
             <Plus className="w-4 h-4" />
             <span>ثبت تسک</span>

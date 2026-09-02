@@ -73,15 +73,15 @@ export const FocusView: React.FC = () => {
   return (
     <div id="focus-view-container" className="max-w-2xl mx-auto space-y-8 py-4">
       {/* Task Selector Banner */}
-      <div className="bg-white dark:bg-slate-900/80 rounded-3xl p-5 border border-gray-200/90 dark:border-slate-800 shadow-2xs space-y-3">
-        <label className="block text-xs font-bold text-gray-600 dark:text-slate-400">
+      <div className="bg-white dark:bg-[#131F2E] rounded-3xl p-5 border border-gray-200/90 dark:border-slate-800 shadow-2xs space-y-3">
+        <label className="block text-xs font-bold text-gray-700 dark:text-slate-300">
           تسک انتخابی برای جلسه تمرکز و پومودورو:
         </label>
         <select
           value={activeTimer?.taskId || selectedTaskIdForFocus}
           onChange={(e) => setSelectedTaskIdForFocus(e.target.value)}
           disabled={activeTimer?.isRunning}
-          className="w-full bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl px-4 py-3 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer disabled:opacity-50"
+          className="w-full bg-gray-50 dark:bg-[#0B131E] border border-gray-200 dark:border-slate-700 rounded-2xl px-4 py-3 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer disabled:opacity-50 font-medium"
         >
           {tasks
             .filter((t) => !t.deletedAt)
@@ -94,9 +94,9 @@ export const FocusView: React.FC = () => {
       </div>
 
       {/* Big Circular Focus Timer Stage */}
-      <div className="relative flex flex-col items-center justify-center p-8 sm:p-12 rounded-3xl bg-white dark:bg-slate-900 border border-gray-200/90 dark:border-slate-800 shadow-xs">
+      <div className="relative flex flex-col items-center justify-center p-8 sm:p-12 rounded-3xl bg-white dark:bg-[#131F2E] border border-gray-200/90 dark:border-slate-800 shadow-xs">
         {/* Ambient Glow */}
-        <div className="absolute w-64 h-64 bg-indigo-500/5 dark:bg-indigo-600/10 rounded-full blur-3xl -z-10 pointer-events-none" />
+        <div className="absolute w-64 h-64 bg-emerald-500/5 dark:bg-emerald-500/10 rounded-full blur-3xl -z-10 pointer-events-none" />
 
         {/* Circular Progress Ring */}
         <div className="relative w-64 h-64 sm:w-80 sm:h-80 flex items-center justify-center">
@@ -115,7 +115,7 @@ export const FocusView: React.FC = () => {
               cx="50"
               cy="50"
               r="44"
-              className="text-indigo-600 dark:text-indigo-500 stroke-current transition-all duration-1000 ease-linear"
+              className="text-emerald-600 dark:text-emerald-500 stroke-current transition-all duration-1000 ease-linear"
               strokeWidth="6"
               strokeDasharray="276.46"
               strokeDashoffset={276.46 - (276.46 * progressPercent) / 100}
@@ -126,14 +126,14 @@ export const FocusView: React.FC = () => {
 
           {/* Center Digital Clock */}
           <div className="absolute flex flex-col items-center justify-center text-center">
-            <span className="text-4xl sm:text-6xl font-black text-[#1E1B4B] dark:text-white font-mono tracking-tight">
+            <span className="text-4xl sm:text-6xl font-black text-gray-900 dark:text-white font-mono tracking-tight">
               {formatTimerDigits(mins)}:{formatTimerDigits(secs)}
             </span>
-            <span className="text-xs text-indigo-700 dark:text-indigo-300 font-semibold mt-1">
+            <span className="text-xs text-emerald-700 dark:text-emerald-300 font-bold mt-1">
               {isStopwatch ? 'کرنومتر آزاد' : 'زمان تمرکز عمیق'}
             </span>
             {activeTask && (
-              <span className="text-xs text-gray-500 dark:text-slate-400 max-w-[180px] sm:max-w-[220px] truncate mt-2 font-medium">
+              <span className="text-xs text-gray-600 dark:text-slate-400 max-w-[180px] sm:max-w-[220px] truncate mt-2 font-medium">
                 {activeTask.title}
               </span>
             )}
@@ -148,7 +148,7 @@ export const FocusView: React.FC = () => {
                 if (activeTimer) resumeTimer();
                 else handleStartDefaultPomodoro();
               }}
-              className="flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-bold text-sm shadow-md transition cursor-pointer"
+              className="flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-sm shadow-md transition cursor-pointer"
             >
               <Play className="w-5 h-5 fill-current" />
               <span>{activeTimer ? 'ادامه تمرکز' : 'شروع ۲۵ دقیقه'}</span>
@@ -166,7 +166,7 @@ export const FocusView: React.FC = () => {
           {activeTimer && (
             <button
               onClick={stopTimer}
-              className="p-3.5 rounded-2xl bg-gray-100 hover:bg-rose-50 text-gray-500 hover:text-rose-600 dark:bg-slate-800 dark:hover:bg-rose-600/20 dark:hover:text-rose-400 dark:text-slate-400 border border-gray-200 dark:border-slate-700 transition cursor-pointer"
+              className="p-3.5 rounded-2xl bg-gray-100 hover:bg-rose-50 text-gray-600 hover:text-rose-600 dark:bg-slate-800 dark:hover:bg-rose-600/20 dark:hover:text-rose-400 dark:text-slate-300 border border-gray-200 dark:border-slate-700 transition cursor-pointer"
               title="پایان جلسه و ذخیره زمان"
             >
               <Square className="w-5 h-5" />
@@ -175,28 +175,28 @@ export const FocusView: React.FC = () => {
         </div>
 
         {/* Mode preset triggers */}
-        <div className="flex items-center gap-2 mt-6 text-xs">
+        <div className="flex flex-wrap items-center justify-center gap-2 mt-6 text-xs">
           <button
             onClick={() => startPomodoro(activeTask?.id || '', 25)}
-            className="px-3.5 py-1.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 transition font-medium cursor-pointer"
+            className="px-3.5 py-1.5 rounded-xl bg-gray-100 hover:bg-emerald-50 text-gray-700 hover:text-emerald-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 transition font-bold cursor-pointer"
           >
             ۲۵ د پومودورو
           </button>
           <button
             onClick={() => startPomodoro(activeTask?.id || '', 50)}
-            className="px-3.5 py-1.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 transition font-medium cursor-pointer"
+            className="px-3.5 py-1.5 rounded-xl bg-gray-100 hover:bg-emerald-50 text-gray-700 hover:text-emerald-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 transition font-bold cursor-pointer"
           >
             ۵۰ د کار عمیق
           </button>
           <button
             onClick={handleStartShortBreak}
-            className="px-3.5 py-1.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 transition font-medium cursor-pointer"
+            className="px-3.5 py-1.5 rounded-xl bg-gray-100 hover:bg-emerald-50 text-gray-700 hover:text-emerald-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 transition font-bold cursor-pointer"
           >
             ۵ د استراحت
           </button>
           <button
             onClick={() => startStopwatch(activeTask?.id || '')}
-            className="px-3.5 py-1.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 transition font-medium cursor-pointer"
+            className="px-3.5 py-1.5 rounded-xl bg-gray-100 hover:bg-emerald-50 text-gray-700 hover:text-emerald-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 transition font-bold cursor-pointer"
           >
             کرنومتر
           </button>

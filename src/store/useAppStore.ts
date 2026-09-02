@@ -250,6 +250,13 @@ export const useAppStore = create<AppState>((set, get) => ({
     set({ isLoading: true });
     try {
       await initializeDatabase();
+      
+      // Purge legacy sample tasks if any exist in indexedDB
+      const legacySamples = await db.tasks.filter((t) => t.id.startsWith('task_sample_')).toArray();
+      if (legacySamples.length > 0) {
+        await Promise.all(legacySamples.map((t) => db.tasks.delete(t.id)));
+      }
+
       const [tasks, boards, lists] = await Promise.all([
         db.tasks.filter((t) => !t.deletedAt).toArray(),
         db.boards.toArray(),

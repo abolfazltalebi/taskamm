@@ -82,19 +82,19 @@ export const KanbanView: React.FC = () => {
   return (
     <div id="kanban-view-container" className="space-y-5">
       {/* Board Selector & Action Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-slate-900/60 p-3 sm:p-4 rounded-3xl border border-gray-200/90 dark:border-slate-800 shadow-2xs">
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-[#131F2E] p-3 sm:p-4 rounded-3xl border border-gray-200/90 dark:border-slate-800 shadow-2xs">
         {/* Board Tabs */}
-        <div className="flex items-center gap-2 overflow-x-auto max-w-full pb-1">
+        <div className="flex items-center gap-2 overflow-x-auto max-w-full pb-1 no-scrollbar">
           {boards.map((b) => {
             const isSelected = b.id === currentBoard?.id;
             return (
               <button
                 key={b.id}
                 onClick={() => setActiveBoardId(b.id)}
-                className={`flex items-center gap-2 px-3.5 py-2 rounded-2xl text-xs font-semibold transition shrink-0 cursor-pointer ${
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-2xl text-xs font-bold transition shrink-0 cursor-pointer ${
                   isSelected
-                    ? 'bg-indigo-600 text-white shadow-xs'
-                    : 'bg-gray-100/90 dark:bg-slate-800/80 text-gray-700 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-200 hover:bg-gray-200/60 dark:hover:bg-slate-800'
+                    ? 'bg-emerald-600 text-white shadow-xs'
+                    : 'bg-gray-100/90 dark:bg-slate-800/80 text-gray-700 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200/60 dark:hover:bg-slate-800'
                 }`}
               >
                 <span>{b.emoji}</span>
@@ -105,7 +105,7 @@ export const KanbanView: React.FC = () => {
 
           <button
             onClick={() => setIsNewBoardModalOpen(true)}
-            className="flex items-center gap-1 px-3 py-2 rounded-2xl bg-gray-50 dark:bg-slate-800/50 hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-300 text-xs font-medium border border-dashed border-gray-300 dark:border-slate-700 transition shrink-0 cursor-pointer"
+            className="flex items-center gap-1 px-3 py-2 rounded-2xl bg-gray-50 dark:bg-slate-800/50 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 text-gray-600 dark:text-slate-300 hover:text-emerald-700 dark:hover:text-emerald-400 text-xs font-semibold border border-dashed border-gray-300 dark:border-slate-700 hover:border-emerald-400 transition shrink-0 cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>برد جدید</span>
@@ -120,7 +120,7 @@ export const KanbanView: React.FC = () => {
                 deleteBoard(currentBoard.id);
               }
             }}
-            className="p-2 rounded-xl text-gray-400 hover:text-rose-600 hover:bg-rose-50 dark:text-slate-500 dark:hover:text-rose-400 dark:hover:bg-rose-500/10 transition text-xs flex items-center gap-1 cursor-pointer"
+            className="p-2 rounded-xl text-gray-400 hover:text-rose-600 hover:bg-rose-50 dark:text-slate-400 dark:hover:text-rose-400 dark:hover:bg-rose-500/10 transition text-xs flex items-center gap-1 cursor-pointer font-medium"
             title="حذف این برد"
           >
             <Trash2 className="w-3.5 h-3.5" />
@@ -144,7 +144,7 @@ export const KanbanView: React.FC = () => {
           return (
             <div
               key={col.id}
-              className="w-[85vw] sm:w-80 shrink-0 snap-center rounded-3xl bg-gray-50/90 dark:bg-slate-900/80 border border-gray-200/90 dark:border-slate-800 p-4 flex flex-col max-h-[75vh] shadow-2xs"
+              className="w-[85vw] sm:w-80 shrink-0 snap-center rounded-3xl bg-gray-50/90 dark:bg-[#131F2E] border border-gray-200/90 dark:border-slate-800 p-4 flex flex-col max-h-[75vh] shadow-2xs"
             >
               {/* Column Header */}
               <div className="flex items-center justify-between pb-3 border-b border-gray-200/80 dark:border-slate-800 mb-3">
@@ -154,7 +154,7 @@ export const KanbanView: React.FC = () => {
                     className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${
                       isWipExceeded
                         ? 'bg-rose-100 text-rose-700 border border-rose-200 dark:bg-rose-500/20 dark:text-rose-300 dark:border-rose-500/40'
-                        : 'bg-gray-200/80 text-gray-700 dark:bg-slate-800 dark:text-slate-400'
+                        : 'bg-gray-200/80 text-gray-700 dark:bg-slate-800 dark:text-slate-300'
                     }`}
                   >
                     {toPersianDigits(colTasks.length)}
@@ -165,7 +165,7 @@ export const KanbanView: React.FC = () => {
                 <div className="flex items-center gap-1">
                   <button
                     onClick={() => setQuickColTaskId(col.id)}
-                    className="p-1 rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-200/60 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800 transition cursor-pointer"
+                    className="p-1 rounded-lg text-gray-500 hover:text-emerald-700 hover:bg-emerald-50 dark:text-slate-400 dark:hover:text-emerald-300 dark:hover:bg-slate-800 transition cursor-pointer"
                     title="افزودن تسک در این ستون"
                   >
                     <Plus className="w-4 h-4" />
@@ -188,7 +188,7 @@ export const KanbanView: React.FC = () => {
 
               {/* Column Quick Add Input Form */}
               {quickColTaskId === col.id && (
-                <div className="mb-3 p-2.5 rounded-2xl bg-white dark:bg-slate-800/90 border border-indigo-200 dark:border-indigo-500/40 space-y-2 shadow-2xs">
+                <div className="mb-3 p-2.5 rounded-2xl bg-white dark:bg-[#0B131E] border border-emerald-300 dark:border-emerald-500/40 space-y-2 shadow-2xs">
                   <input
                     type="text"
                     autoFocus
@@ -199,13 +199,13 @@ export const KanbanView: React.FC = () => {
                       if (e.key === 'Enter') handleQuickAddInColumn(col.id);
                       if (e.key === 'Escape') setQuickColTaskId(null);
                     }}
-                    className="w-full bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    className="w-full bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 font-medium"
                   />
                   <div className="flex items-center justify-end gap-2">
                     <button
                       type="button"
                       onClick={() => setQuickColTaskId(null)}
-                      className="px-2.5 py-1 rounded-lg text-xs text-gray-500 hover:text-gray-900 dark:text-slate-400 dark:hover:text-white cursor-pointer"
+                      className="px-2.5 py-1 rounded-lg text-xs text-gray-500 hover:text-gray-900 dark:text-slate-400 dark:hover:text-white cursor-pointer font-medium"
                     >
                       انصراف
                     </button>
@@ -213,7 +213,7 @@ export const KanbanView: React.FC = () => {
                       type="button"
                       onClick={() => handleQuickAddInColumn(col.id)}
                       disabled={!quickColTitle.trim()}
-                      className="px-3 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-xs font-semibold text-white disabled:opacity-40 cursor-pointer"
+                      className="px-3 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-xs font-bold text-white disabled:opacity-40 cursor-pointer shadow-xs"
                     >
                       ثبت
                     </button>
@@ -229,7 +229,7 @@ export const KanbanView: React.FC = () => {
                       <TaskCard task={task} compact />
                       
                       {/* Move to another column quick triggers on hover/touch */}
-                      <div className="absolute top-2 end-2 opacity-0 group-hover/card:opacity-100 transition flex items-center gap-1 bg-white/95 dark:bg-slate-950/90 rounded-lg p-1 border border-gray-200 dark:border-slate-700 shadow-xs">
+                      <div className="absolute top-2 end-2 opacity-0 group-hover/card:opacity-100 transition flex items-center gap-1 bg-white/95 dark:bg-[#0B131E]/95 rounded-lg p-1 border border-gray-200 dark:border-slate-700 shadow-xs">
                         {currentLists.map((otherCol) => {
                           if (otherCol.id === col.id) return null;
                           return (
@@ -239,7 +239,7 @@ export const KanbanView: React.FC = () => {
                                 e.stopPropagation();
                                 moveTask(task.id, otherCol.id);
                               }}
-                              className="px-1.5 py-0.5 rounded text-[10px] bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-slate-300 hover:bg-indigo-600 hover:text-white transition cursor-pointer"
+                              className="px-1.5 py-0.5 rounded text-[10px] bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-slate-300 hover:bg-emerald-600 hover:text-white transition cursor-pointer font-medium"
                               title={`انتقال به ${otherCol.name}`}
                             >
                               {otherCol.name.slice(0, 8)}
@@ -262,7 +262,7 @@ export const KanbanView: React.FC = () => {
         {/* Add Column Button */}
         <div className="w-[85vw] sm:w-80 shrink-0 snap-center">
           {isAddingCol ? (
-            <form onSubmit={handleCreateList} className="p-4 rounded-3xl bg-white dark:bg-slate-900/90 border border-gray-200/90 dark:border-slate-800 space-y-3 shadow-2xs">
+            <form onSubmit={handleCreateList} className="p-4 rounded-3xl bg-white dark:bg-[#131F2E] border border-gray-200/90 dark:border-slate-800 space-y-3 shadow-2xs">
               <h4 className="text-xs font-bold text-gray-900 dark:text-white">نام ستون جدید</h4>
               <input
                 type="text"
@@ -270,20 +270,20 @@ export const KanbanView: React.FC = () => {
                 placeholder="مثال: در انتظار تایید..."
                 value={newColName}
                 onChange={(e) => setNewColName(e.target.value)}
-                className="w-full bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                className="w-full bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 font-medium"
               />
               <div className="flex items-center justify-end gap-2">
                 <button
                   type="button"
                   onClick={() => setIsAddingCol(false)}
-                  className="px-3 py-1.5 rounded-xl text-xs text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white cursor-pointer"
+                  className="px-3 py-1.5 rounded-xl text-xs text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white cursor-pointer font-medium"
                 >
                   انصراف
                 </button>
                 <button
                   type="submit"
                   disabled={!newColName.trim()}
-                  className="px-4 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-xs font-semibold text-white disabled:opacity-40 cursor-pointer"
+                  className="px-4 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-xs font-bold text-white disabled:opacity-40 cursor-pointer shadow-xs"
                 >
                   افزودن ستون
                 </button>
@@ -292,10 +292,10 @@ export const KanbanView: React.FC = () => {
           ) : (
             <button
               onClick={() => setIsAddingCol(true)}
-              className="w-full h-36 rounded-3xl bg-white/60 dark:bg-slate-900/40 hover:bg-white dark:hover:bg-slate-900/80 border-2 border-dashed border-gray-300 dark:border-slate-800 hover:border-indigo-400 text-gray-500 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-white flex flex-col items-center justify-center gap-2 transition cursor-pointer"
+              className="w-full h-36 rounded-3xl bg-white/60 dark:bg-[#131F2E]/60 hover:bg-white dark:hover:bg-[#131F2E] border-2 border-dashed border-gray-300 dark:border-slate-800 hover:border-emerald-500 text-gray-500 hover:text-emerald-700 dark:text-slate-400 dark:hover:text-emerald-400 flex flex-col items-center justify-center gap-2 transition cursor-pointer"
             >
               <Plus className="w-5 h-5" />
-              <span className="text-xs font-semibold">+ افزودن ستون جدید</span>
+              <span className="text-xs font-bold">+ افزودن ستون جدید</span>
             </button>
           )}
         </div>
@@ -304,38 +304,38 @@ export const KanbanView: React.FC = () => {
       {/* New Board Modal */}
       {isNewBoardModalOpen && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs"
           onClick={() => setIsNewBoardModalOpen(false)}
         >
           <div 
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-sm bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-3xl p-5 text-[#1E293B] dark:text-slate-100 shadow-2xl space-y-4"
+            className="w-full max-w-sm bg-white dark:bg-[#131F2E] border border-gray-200 dark:border-slate-800 rounded-3xl p-5 text-gray-900 dark:text-slate-100 shadow-2xl space-y-4"
           >
-            <h3 className="text-base font-bold text-gray-900 dark:text-white">ایجاد برد جدید</h3>
+            <h3 className="text-base font-black text-gray-900 dark:text-white">ایجاد برد جدید</h3>
             
             <form onSubmit={handleCreateBoard} className="space-y-3">
               <div>
-                <label className="block text-xs text-gray-500 dark:text-slate-400 mb-1 font-medium">نام برد</label>
+                <label className="block text-xs text-gray-500 dark:text-slate-400 mb-1 font-semibold">نام برد</label>
                 <input
                   type="text"
                   autoFocus
-                  placeholder="مثال: بازاریابی، پروژه‌های دانشگاه..."
+                  placeholder="مثال: بازاریابی، پروژه‌های شخصی..."
                   value={newBoardName}
                   onChange={(e) => setNewBoardName(e.target.value)}
-                  className="w-full bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  className="w-full bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-emerald-500 font-medium"
                 />
               </div>
 
               <div>
-                <label className="block text-xs text-gray-500 dark:text-slate-400 mb-1 font-medium">انتخاب آیکون / اموجی</label>
+                <label className="block text-xs text-gray-500 dark:text-slate-400 mb-1 font-semibold">انتخاب آیکون / اموجی</label>
                 <div className="flex items-center gap-2">
-                  {['📁', '🎯', '💼', '🚀', '📚', '⚡', '💡', '🎨'].map((emoji) => (
+                  {['📁', '🎯', '💼', '🚀', '📚', '⚡', '💡', '🌱'].map((emoji) => (
                     <button
                       key={emoji}
                       type="button"
                       onClick={() => setNewBoardEmoji(emoji)}
                       className={`w-8 h-8 rounded-xl flex items-center justify-center text-sm transition cursor-pointer ${
-                        newBoardEmoji === emoji ? 'bg-indigo-600 text-white scale-110 shadow-xs' : 'bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700'
+                        newBoardEmoji === emoji ? 'bg-emerald-600 text-white scale-110 shadow-xs' : 'bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700'
                       }`}
                     >
                       {emoji}
@@ -348,14 +348,14 @@ export const KanbanView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsNewBoardModalOpen(false)}
-                  className="px-4 py-2 rounded-xl text-xs text-gray-500 hover:text-gray-900 dark:text-slate-400 dark:hover:text-white cursor-pointer"
+                  className="px-4 py-2 rounded-xl text-xs text-gray-500 hover:text-gray-900 dark:text-slate-400 dark:hover:text-white cursor-pointer font-medium"
                 >
                   انصراف
                 </button>
                 <button
                   type="submit"
                   disabled={!newBoardName.trim()}
-                  className="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-xs font-semibold text-white disabled:opacity-40 cursor-pointer"
+                  className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-xs font-bold text-white disabled:opacity-40 cursor-pointer shadow-xs"
                 >
                   ایجاد برد
                 </button>

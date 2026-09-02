@@ -74,12 +74,12 @@ export function App() {
   }, [setActiveTab, setIsQuickAddOpen]);
 
   return (
-    <div className="min-h-screen bg-[#F9FAFB] text-[#1E293B] dark:bg-slate-950 dark:text-slate-100 flex flex-col antialiased selection:bg-indigo-600 selection:text-white pb-20 md:pb-8 transition-colors">
+    <div className="min-h-screen bg-[#F8FAFC] text-[#0F172A] dark:bg-[#0B131E] dark:text-[#F1F5F9] flex flex-col antialiased selection:bg-emerald-600 selection:text-white pb-24 md:pb-8 transition-colors">
       {/* Top Header */}
       <Header onOpenInstallGuide={() => setIsInstallGuideOpen(true)} />
 
       {/* Main Content Area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 pt-6 pb-12">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-3.5 sm:px-6 pt-4 sm:pt-6 pb-8">
         {activeTab === 'today' && <TodayView />}
         {activeTab === 'boards' && <KanbanView />}
         {activeTab === 'calendar' && <CalendarView />}
@@ -98,7 +98,7 @@ export function App() {
       {/* Floating Modal: Quick Add Task Dialog */}
       {isQuickAddOpen && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/60 backdrop-blur-xs"
           onClick={() => setIsQuickAddOpen(false)}
         >
           <div onClick={(e) => e.stopPropagation()} className="w-full max-w-2xl">

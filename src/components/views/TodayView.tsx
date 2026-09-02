@@ -66,20 +66,20 @@ export const TodayView: React.FC = () => {
   return (
     <div id="today-view-container" className="space-y-6">
       {/* Top Welcome & Daily Progress Summary Header */}
-      <div className="relative overflow-hidden rounded-3xl bg-white dark:bg-slate-900 border border-gray-200/90 dark:border-slate-800/80 p-5 sm:p-7 shadow-xs">
+      <div className="relative overflow-hidden rounded-3xl bg-white dark:bg-[#131F2E] border border-gray-200/90 dark:border-slate-800/80 p-5 sm:p-7 shadow-xs">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-5">
           <div>
             <div className="flex items-center gap-2 mb-1.5">
-              <span className="px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300 text-xs font-semibold border border-indigo-100 dark:border-indigo-500/30 flex items-center gap-1">
-                <Flame className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+              <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 dark:bg-emerald-500/15 dark:text-emerald-300 text-xs font-semibold border border-emerald-200/70 dark:border-emerald-500/30 flex items-center gap-1">
+                <Flame className="w-3.5 h-3.5 text-emerald-700 dark:text-emerald-400" />
                 <span>برنامه امروز</span>
               </span>
-              <span className="text-xs text-gray-500 dark:text-slate-400">
+              <span className="text-xs text-gray-500 dark:text-slate-400 font-medium">
                 {formatJalaliDate(Date.now(), 'dayOfWeek')}
               </span>
             </div>
 
-            <h2 className="text-xl sm:text-2xl font-extrabold text-[#1E1B4B] dark:text-white tracking-tight">
+            <h2 className="text-lg sm:text-2xl font-black text-gray-900 dark:text-white tracking-tight leading-snug">
               {totalTodayCount === 0
                 ? 'امروز تسکی تعریف نشده است.'
                 : completedTodayCount === totalTodayCount && totalTodayCount > 0
@@ -87,15 +87,15 @@ export const TodayView: React.FC = () => {
                 : `${toPersianDigits(totalTodayCount - completedTodayCount)} کار برای رسیدگی باقی مانده است.`}
             </h2>
 
-            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-1">
-              زمان ثبت‌شده امروز: <strong className="text-gray-900 dark:text-white font-semibold">{formatDuration(totalTodaySpentMinutes)}</strong>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-1 font-normal">
+              زمان ثبت‌شده امروز: <strong className="text-emerald-800 dark:text-emerald-300 font-bold">{formatDuration(totalTodaySpentMinutes)}</strong>
             </p>
           </div>
 
           {/* Circular / Bar Progress Metric */}
-          <div className="flex items-center gap-4 bg-gray-50/90 dark:bg-slate-950/60 p-4 rounded-2xl border border-gray-200/80 dark:border-slate-800 shrink-0 shadow-2xs">
+          <div className="flex items-center gap-4 bg-gray-50/90 dark:bg-[#0B131E]/60 p-4 rounded-2xl border border-gray-200/80 dark:border-slate-800 shrink-0 shadow-2xs">
             <div className="text-center">
-              <span className="text-2xl font-extrabold text-[#1E1B4B] dark:text-white">
+              <span className="text-2xl font-black text-gray-900 dark:text-white">
                 %{toPersianDigits(progressPercent)}
               </span>
               <span className="block text-[11px] text-gray-500 dark:text-slate-400 font-medium">پیشرفت امروز</span>
@@ -104,7 +104,7 @@ export const TodayView: React.FC = () => {
             <div className="w-px h-10 bg-gray-200 dark:bg-slate-800" />
 
             <div className="text-center">
-              <span className="text-2xl font-extrabold text-indigo-600 dark:text-indigo-400">
+              <span className="text-2xl font-black text-emerald-700 dark:text-emerald-400">
                 {toPersianDigits(completedTodayCount)}/{toPersianDigits(totalTodayCount)}
               </span>
               <span className="block text-[11px] text-gray-500 dark:text-slate-400 font-medium">انجام‌شده</span>
@@ -139,44 +139,44 @@ export const TodayView: React.FC = () => {
       <QuickAddTask inline />
 
       {/* Filter and Category Pills */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 max-w-full text-xs">
+      <div className="flex flex-wrap items-center justify-between gap-2.5 pt-1">
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 max-w-full text-xs no-scrollbar">
           <button
             onClick={() => { setFilterType('all'); setSelectedTag(null); }}
-            className={`px-3.5 py-1.5 rounded-xl transition cursor-pointer ${
+            className={`px-3.5 py-1.5 rounded-xl transition cursor-pointer whitespace-nowrap ${
               filterType === 'all' && !selectedTag
-                ? 'bg-indigo-600 text-white font-semibold shadow-xs'
-                : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200 dark:bg-slate-900 dark:text-slate-400 dark:hover:text-white dark:border-slate-800'
+                ? 'bg-emerald-600 text-white font-bold shadow-xs'
+                : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200 dark:bg-[#131F2E] dark:text-slate-300 dark:hover:text-white dark:border-slate-800'
             }`}
           >
             همه ({toPersianDigits(todayTasks.length)})
           </button>
           <button
             onClick={() => { setFilterType('pending'); setSelectedTag(null); }}
-            className={`px-3.5 py-1.5 rounded-xl transition cursor-pointer ${
+            className={`px-3.5 py-1.5 rounded-xl transition cursor-pointer whitespace-nowrap ${
               filterType === 'pending'
-                ? 'bg-indigo-600 text-white font-semibold shadow-xs'
-                : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200 dark:bg-slate-900 dark:text-slate-400 dark:hover:text-white dark:border-slate-800'
+                ? 'bg-emerald-600 text-white font-bold shadow-xs'
+                : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200 dark:bg-[#131F2E] dark:text-slate-300 dark:hover:text-white dark:border-slate-800'
             }`}
           >
             در انتظار انجام ({toPersianDigits(todayTasks.filter((t) => t.status !== 'done').length)})
           </button>
           <button
             onClick={() => { setFilterType('urgent'); setSelectedTag(null); }}
-            className={`px-3.5 py-1.5 rounded-xl transition cursor-pointer ${
+            className={`px-3.5 py-1.5 rounded-xl transition cursor-pointer whitespace-nowrap ${
               filterType === 'urgent'
-                ? 'bg-rose-600 text-white font-semibold shadow-xs'
-                : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200 dark:bg-slate-900 dark:text-slate-400 dark:hover:text-white dark:border-slate-800'
+                ? 'bg-rose-600 text-white font-bold shadow-xs'
+                : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200 dark:bg-[#131F2E] dark:text-slate-300 dark:hover:text-white dark:border-slate-800'
             }`}
           >
             فوری و مهم
           </button>
           <button
             onClick={() => { setFilterType('done'); setSelectedTag(null); }}
-            className={`px-3.5 py-1.5 rounded-xl transition cursor-pointer ${
+            className={`px-3.5 py-1.5 rounded-xl transition cursor-pointer whitespace-nowrap ${
               filterType === 'done'
-                ? 'bg-emerald-600 text-white font-semibold shadow-xs'
-                : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200 dark:bg-slate-900 dark:text-slate-400 dark:hover:text-white dark:border-slate-800'
+                ? 'bg-emerald-600 text-white font-bold shadow-xs'
+                : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200 dark:bg-[#131F2E] dark:text-slate-300 dark:hover:text-white dark:border-slate-800'
             }`}
           >
             انجام‌شده ({toPersianDigits(completedTodayCount)})
@@ -187,10 +187,10 @@ export const TodayView: React.FC = () => {
             <button
               key={tag}
               onClick={() => setSelectedTag(selectedTag === tag ? null : tag)}
-              className={`px-2.5 py-1.5 rounded-xl transition text-[11px] cursor-pointer ${
+              className={`px-2.5 py-1.5 rounded-xl transition text-[11px] cursor-pointer whitespace-nowrap ${
                 selectedTag === tag
-                  ? 'bg-sky-600 text-white font-semibold shadow-xs'
-                  : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200 dark:bg-slate-900 dark:text-slate-400 dark:hover:text-white dark:border-slate-800'
+                  ? 'bg-emerald-700 text-white font-bold shadow-xs'
+                  : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200 dark:bg-[#131F2E] dark:text-slate-300 dark:hover:text-white dark:border-slate-800'
               }`}
             >
               #{tag}
@@ -208,8 +208,8 @@ export const TodayView: React.FC = () => {
         </div>
       ) : (
         /* Empty State */
-        <div className="text-center py-12 px-4 rounded-3xl bg-white dark:bg-slate-900/40 border border-gray-200/90 dark:border-slate-800/60 space-y-3 shadow-2xs">
-          <div className="w-12 h-12 mx-auto rounded-2xl bg-indigo-50 dark:bg-indigo-600/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center border border-indigo-100 dark:border-indigo-500/20">
+        <div className="text-center py-12 px-4 rounded-3xl bg-white dark:bg-[#131F2E]/50 border border-gray-200/90 dark:border-slate-800/60 space-y-3 shadow-2xs">
+          <div className="w-12 h-12 mx-auto rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 flex items-center justify-center border border-emerald-200/70 dark:border-emerald-500/20">
             <CheckCircle2 className="w-6 h-6" />
           </div>
           <h3 className="text-base font-bold text-gray-900 dark:text-white">

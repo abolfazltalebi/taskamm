@@ -31,10 +31,10 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, compact = false }) => 
 
   const priorityColors = {
     none: 'border-gray-200 text-gray-400 dark:border-slate-800 dark:text-slate-400',
-    low: 'border-emerald-200 text-emerald-700 bg-emerald-50 dark:border-emerald-500/30 dark:text-emerald-400 dark:bg-emerald-500/10',
-    medium: 'border-sky-200 text-sky-700 bg-sky-50 dark:border-sky-500/30 dark:text-sky-400 dark:bg-sky-500/10',
-    high: 'border-amber-200 text-amber-700 bg-amber-50 dark:border-amber-500/30 dark:text-amber-400 dark:bg-amber-500/10',
-    urgent: 'border-rose-200 text-rose-700 bg-rose-50 dark:border-rose-500/40 dark:text-rose-400 dark:bg-rose-500/15 animate-pulse',
+    low: 'border-emerald-200 text-emerald-800 bg-emerald-50 dark:border-emerald-500/30 dark:text-emerald-300 dark:bg-emerald-500/10',
+    medium: 'border-teal-200 text-teal-800 bg-teal-50 dark:border-teal-500/30 dark:text-teal-300 dark:bg-teal-500/10',
+    high: 'border-amber-200 text-amber-800 bg-amber-50 dark:border-amber-500/30 dark:text-amber-300 dark:bg-amber-500/10',
+    urgent: 'border-rose-200 text-rose-800 bg-rose-50 dark:border-rose-500/40 dark:text-rose-300 dark:bg-rose-500/15',
   };
 
   const priorityLabels = {
@@ -53,9 +53,9 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, compact = false }) => 
       onClick={() => setSelectedTaskId(task.id)}
       className={`group relative w-full text-start rounded-2xl transition-all duration-200 cursor-pointer select-none border ${
         isDone
-          ? 'bg-gray-50/70 dark:bg-slate-900/40 border-gray-200/70 dark:border-slate-800/60 opacity-65'
-          : 'bg-white dark:bg-slate-900/90 hover:border-indigo-300 dark:hover:border-slate-700 border-gray-200/90 dark:border-slate-800/90 shadow-2xs hover:shadow-xs'
-      } ${compact ? 'p-3' : 'p-4'}`}
+          ? 'bg-gray-50/70 dark:bg-[#131F2E]/40 border-gray-200/70 dark:border-slate-800/60 opacity-65'
+          : 'bg-white dark:bg-[#131F2E] hover:border-emerald-500/50 dark:hover:border-emerald-500/50 border-gray-200/90 dark:border-slate-800/90 shadow-2xs hover:shadow-xs'
+      } ${compact ? 'p-3' : 'p-3.5 sm:p-4'}`}
     >
       <div className="flex items-start gap-3">
         {/* Checkbox */}
@@ -69,7 +69,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, compact = false }) => 
           className={`shrink-0 w-5.5 h-5.5 mt-0.5 rounded-lg flex items-center justify-center transition-all ${
             isDone
               ? 'bg-emerald-600 text-white font-bold shadow-xs scale-105'
-              : 'border-2 border-gray-300 dark:border-slate-600 hover:border-indigo-600 dark:hover:border-indigo-400 text-transparent hover:bg-indigo-50 dark:hover:bg-indigo-500/10 active:scale-90'
+              : 'border-2 border-gray-300 dark:border-slate-600 hover:border-emerald-600 dark:hover:border-emerald-400 text-transparent hover:bg-emerald-50 dark:hover:bg-emerald-500/10 active:scale-90'
           }`}
           aria-label={isDone ? 'علامت به عنوان انجام‌نشده' : 'تکمیل تسک'}
         >
@@ -80,8 +80,8 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, compact = false }) => 
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between gap-2">
             <h4
-              className={`text-sm font-medium leading-snug truncate transition ${
-                isDone ? 'line-through text-gray-400 dark:text-slate-500' : 'text-[#1E293B] dark:text-slate-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-300'
+              className={`text-xs sm:text-sm font-semibold leading-snug truncate transition ${
+                isDone ? 'line-through text-gray-400 dark:text-slate-500' : 'text-gray-900 dark:text-slate-100 group-hover:text-emerald-700 dark:group-hover:text-emerald-400'
               }`}
             >
               {task.title}
@@ -89,7 +89,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, compact = false }) => 
 
             {/* Recurrence icon */}
             {task.recurrence && task.recurrence !== 'none' && (
-              <span className="shrink-0 p-1 text-indigo-600 bg-indigo-50 dark:text-indigo-400 dark:bg-indigo-500/10 rounded-md" title="تکرارشونده">
+              <span className="shrink-0 p-1 text-emerald-700 bg-emerald-50 dark:text-emerald-300 dark:bg-emerald-500/10 rounded-md" title="تکرارشونده">
                 <Repeat className="w-3 h-3" />
               </span>
             )}
@@ -97,7 +97,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, compact = false }) => 
 
           {/* Optional Short Description Preview */}
           {!compact && task.description && !isDone && (
-            <p className="text-xs text-gray-500 dark:text-slate-400 line-clamp-1 mt-1 font-normal">
+            <p className="text-xs text-gray-500 dark:text-slate-400 line-clamp-2 mt-1 font-normal leading-[1.65]">
               {task.description}
             </p>
           )}
@@ -111,7 +111,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, compact = false }) => 
               </span>
               <div className="flex-1 h-1 bg-gray-100 dark:bg-slate-800 rounded-full overflow-hidden max-w-[80px]">
                 <div
-                  className="h-full bg-indigo-600 dark:bg-indigo-500 rounded-full transition-all"
+                  className="h-full bg-emerald-600 dark:bg-emerald-500 rounded-full transition-all"
                   style={{ width: `${(doneSubtasks / totalSubtasks) * 100}%` }}
                 />
               </div>
@@ -119,7 +119,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, compact = false }) => 
           )}
 
           {/* Metadata Row: Due Date, Spent/Estimate, Tags, Priority */}
-          <div className="flex flex-wrap items-center gap-2 mt-2.5 pt-2 border-t border-gray-100 dark:border-slate-800/60 text-[11px]">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mt-2.5 pt-2 border-t border-gray-100 dark:border-slate-800/60 text-[11px]">
             {/* Due date */}
             {task.dueAt && (
               <span
@@ -127,7 +127,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, compact = false }) => 
                   dueInfo.isOverdue
                     ? 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-500/10 dark:text-rose-400 dark:border-rose-500/30'
                     : dueInfo.isToday
-                    ? 'bg-indigo-50 text-indigo-700 border-indigo-200 dark:bg-indigo-500/10 dark:text-indigo-300 dark:border-indigo-500/30'
+                    ? 'bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-500/15 dark:text-emerald-300 dark:border-emerald-500/30 font-semibold'
                     : 'bg-gray-50 text-gray-700 border-gray-200 dark:bg-slate-800/80 dark:text-slate-300 dark:border-slate-700/60'
                 }`}
               >
@@ -141,7 +141,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, compact = false }) => 
               <span
                 className={`flex items-center gap-1 px-2 py-0.5 rounded-md border ${
                   isOverSpent
-                    ? 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-500/15 dark:text-amber-300 dark:border-amber-500/40 font-medium'
+                    ? 'bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-500/15 dark:text-amber-300 dark:border-amber-500/40 font-medium'
                     : 'bg-gray-50 text-gray-600 border-gray-200 dark:bg-slate-800/80 dark:text-slate-300 dark:border-slate-700/60'
                 }`}
                 title={`صرف‌شده: ${formatDuration(task.spentMinutes)} / تخمین: ${formatDuration(task.estimateMinutes)}`}
@@ -193,8 +193,8 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, compact = false }) => 
                   }}
                   className={`flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-medium transition cursor-pointer ${
                     isCurrentTimerActive
-                      ? 'bg-indigo-600 text-white animate-pulse'
-                      : 'text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800'
+                      ? 'bg-emerald-600 text-white animate-pulse font-bold'
+                      : 'text-gray-500 hover:text-emerald-700 hover:bg-emerald-50 dark:text-slate-400 dark:hover:text-emerald-300 dark:hover:bg-slate-800'
                   }`}
                   title="شروع تمرکز پومودورو"
                 >
