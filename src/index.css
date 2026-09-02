@@ -83,13 +83,73 @@
   background: rgba(16, 185, 129, 0.4);
 }
 
-/* iOS Safe Areas */
+/* iOS Safe Areas & Notches */
 .pb-safe {
-  padding-bottom: env(safe-area-inset-bottom, 16px);
+  padding-bottom: max(env(safe-area-inset-bottom, 0px), 12px);
 }
 
 .pt-safe {
-  padding-top: env(safe-area-inset-top, 16px);
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+.pl-safe {
+  padding-left: env(safe-area-inset-left, 0px);
+}
+
+.pr-safe {
+  padding-right: env(safe-area-inset-right, 0px);
+}
+
+.mb-safe {
+  margin-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.mt-safe {
+  margin-top: env(safe-area-inset-top, 0px);
+}
+
+/* Apple Liquid Glass Aesthetics */
+.apple-liquid-glass {
+  background: rgba(255, 255, 255, 0.76);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 
+    0 16px 36px -6px rgba(15, 23, 42, 0.12),
+    0 6px 14px -3px rgba(15, 23, 42, 0.06),
+    inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 1px 0 rgba(0, 0, 0, 0.04);
+}
+
+.dark .apple-liquid-glass {
+  background: rgba(11, 19, 30, 0.76);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 
+    0 20px 42px -6px rgba(0, 0, 0, 0.6),
+    0 8px 18px -4px rgba(0, 0, 0, 0.4),
+    inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.22),
+    inset 0 -1px 1px 0 rgba(0, 0, 0, 0.35);
+}
+
+.apple-liquid-pill-active {
+  background: rgba(5, 150, 105, 0.12);
+  border: 1px solid rgba(5, 150, 105, 0.22);
+}
+
+.dark .apple-liquid-pill-active {
+  background: rgba(16, 185, 129, 0.16);
+  border: 1px solid rgba(52, 211, 153, 0.28);
+}
+
+.apple-glass-fab {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  box-shadow: 
+    0 10px 24px -4px rgba(5, 150, 105, 0.5),
+    0 4px 10px -2px rgba(5, 150, 105, 0.3),
+    inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.45),
+    inset 0 -1.5px 2px 0 rgba(0, 0, 0, 0.25);
 }
 
 /* Smooth drag and drop styles */

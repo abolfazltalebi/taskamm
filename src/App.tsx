@@ -74,7 +74,7 @@ export function App() {
   }, [setActiveTab, setIsQuickAddOpen]);
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] text-[#0F172A] dark:bg-[#0B131E] dark:text-[#F1F5F9] flex flex-col antialiased selection:bg-emerald-600 selection:text-white pb-24 md:pb-8 transition-colors">
+    <div className="min-h-screen bg-[#F8FAFC] text-[#0F172A] dark:bg-[#0B131E] dark:text-[#F1F5F9] flex flex-col antialiased selection:bg-emerald-600 selection:text-white pb-28 md:pb-8 transition-colors">
       {/* Top Header */}
       <Header onOpenInstallGuide={() => setIsInstallGuideOpen(true)} />
 

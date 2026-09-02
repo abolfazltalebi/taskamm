@@ -26,68 +26,77 @@ export const MobileNav: React.FC = () => {
   ];
 
   return (
-    <nav 
-      id="mobile-bottom-navigation"
-      className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 dark:bg-[#0B131E]/95 backdrop-blur-2xl border-t border-emerald-950/5 dark:border-emerald-500/10 pb-safe shadow-lg transition-colors"
+    <div 
+      id="mobile-bottom-navigation-container"
+      className="md:hidden fixed bottom-0 inset-x-0 z-40 px-3 pb-safe pointer-events-none mb-1.5"
     >
-      <div className="flex items-center justify-around h-16 px-2 relative">
-        {tabs.slice(0, 2).map((item) => {
-          const isActive = activeTab === item.id;
-          return (
-            <button
-              key={item.id}
-              onClick={() => setActiveTab(item.id)}
-              className={`flex flex-col items-center justify-center min-w-[56px] min-h-[44px] transition-all relative cursor-pointer ${
-                isActive ? 'text-emerald-700 dark:text-emerald-400 font-bold scale-105' : 'text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-200'
-              }`}
-            >
-              <div className="relative">
-                {item.icon}
-                {item.badge !== undefined && (
-                  <span className="absolute -top-1 -end-2 w-4 h-4 rounded-full bg-emerald-600 text-[9px] font-bold text-white flex items-center justify-center shadow">
-                    {item.badge}
-                  </span>
-                )}
-              </div>
-              <span className="text-[10px] mt-1 font-medium">{item.label}</span>
-            </button>
-          );
-        })}
+      <nav 
+        id="mobile-bottom-navigation"
+        className="pointer-events-auto max-w-md mx-auto apple-liquid-glass rounded-[26px] px-2 py-1.5 transition-all"
+      >
+        <div className="flex items-center justify-around h-14 relative">
+          {tabs.slice(0, 2).map((item) => {
+            const isActive = activeTab === item.id;
+            return (
+              <button
+                key={item.id}
+                onClick={() => setActiveTab(item.id)}
+                className={`flex flex-col items-center justify-center min-w-[52px] py-1 px-2.5 rounded-2xl transition-all relative cursor-pointer active:scale-95 ${
+                  isActive 
+                    ? 'apple-liquid-pill-active text-emerald-800 dark:text-emerald-300 font-black' 
+                    : 'text-gray-500 dark:text-slate-400 hover:text-gray-800 dark:hover:text-slate-200'
+                }`}
+              >
+                <div className="relative">
+                  {item.icon}
+                  {item.badge !== undefined && (
+                    <span className="absolute -top-1.5 -end-2 w-4 h-4 rounded-full bg-emerald-600 text-[9px] font-black text-white flex items-center justify-center shadow-xs border border-white/60 dark:border-slate-800">
+                      {item.badge}
+                    </span>
+                  )}
+                </div>
+                <span className="text-[10px] mt-0.5 font-bold tracking-tight">{item.label}</span>
+              </button>
+            );
+          })}
 
-        {/* Center Floating Plus Quick Add Button */}
-        <div className="relative -top-3">
-          <button
-            id="mobile-center-add-btn"
-            onClick={() => setIsQuickAddOpen(true)}
-            className="w-13 h-13 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center shadow-md shadow-emerald-700/30 active:scale-95 transition cursor-pointer"
-            aria-label="ثبت سریع تسک"
-          >
-            <Plus className="w-6 h-6 stroke-[2.5]" />
-          </button>
+          {/* Center Floating Apple Glass Plus Quick Add Button */}
+          <div className="relative -top-3">
+            <button
+              id="mobile-center-add-btn"
+              onClick={() => setIsQuickAddOpen(true)}
+              className="apple-glass-fab w-12 h-12 rounded-2xl text-white flex items-center justify-center active:scale-95 hover:scale-105 transition-all cursor-pointer"
+              aria-label="ثبت سریع تسک"
+            >
+              <Plus className="w-6 h-6 stroke-[2.5]" />
+            </button>
+          </div>
+
+          {tabs.slice(2).map((item) => {
+            const isActive = activeTab === item.id;
+            const isTimerRunning = item.id === 'focus' && activeTimer?.isRunning;
+            return (
+              <button
+                key={item.id}
+                onClick={() => setActiveTab(item.id)}
+                className={`flex flex-col items-center justify-center min-w-[52px] py-1 px-2.5 rounded-2xl transition-all relative cursor-pointer active:scale-95 ${
+                  isActive 
+                    ? 'apple-liquid-pill-active text-emerald-800 dark:text-emerald-300 font-black' 
+                    : 'text-gray-500 dark:text-slate-400 hover:text-gray-800 dark:hover:text-slate-200'
+                }`}
+              >
+                <div className="relative">
+                  {item.icon}
+                  {isTimerRunning && (
+                    <span className="absolute -top-1 -end-1 w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping" />
+                  )}
+                </div>
+                <span className="text-[10px] mt-0.5 font-bold tracking-tight">{item.label}</span>
+              </button>
+            );
+          })}
         </div>
-
-        {tabs.slice(2).map((item) => {
-          const isActive = activeTab === item.id;
-          const isTimerRunning = item.id === 'focus' && activeTimer?.isRunning;
-          return (
-            <button
-              key={item.id}
-              onClick={() => setActiveTab(item.id)}
-              className={`flex flex-col items-center justify-center min-w-[56px] min-h-[44px] transition-all relative cursor-pointer ${
-                isActive ? 'text-emerald-700 dark:text-emerald-400 font-bold scale-105' : 'text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-200'
-              }`}
-            >
-              <div className="relative">
-                {item.icon}
-                {isTimerRunning && (
-                  <span className="absolute -top-1 -end-1 w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping" />
-                )}
-              </div>
-              <span className="text-[10px] mt-1 font-medium">{item.label}</span>
-            </button>
-          );
-        })}
-      </div>
-    </nav>
+      </nav>
+    </div>
   );
 };

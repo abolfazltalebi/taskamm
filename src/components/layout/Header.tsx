@@ -57,7 +57,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenInstallGuide }) => {
   return (
     <header 
       id="main-app-header"
-      className="sticky top-0 z-40 w-full border-b border-emerald-950/5 bg-white/95 dark:border-emerald-500/10 dark:bg-[#0B131E]/95 backdrop-blur-xl transition-all shadow-2xs"
+      className="sticky top-0 z-40 w-full border-b border-emerald-950/5 bg-white/95 dark:border-emerald-500/10 dark:bg-[#0B131E]/95 backdrop-blur-xl transition-all shadow-2xs pt-safe"
     >
       <div className="max-w-7xl mx-auto px-3.5 sm:px-6">
         <div className="flex items-center justify-between h-15 sm:h-16 gap-2 sm:gap-3">
