@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="50%" stop-color="#1e1b4b" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="glowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1" />
+      <stop offset="100%" stop-color="#3b82f6" />
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#818cf8" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="100%" stop-color="#f59e0b" />
+    </linearGradient>
+    <filter id="cardShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000000" flood-opacity="0.45" />
+    </filter>
+  </defs>
+
+  <!-- Background Base with rounded corners -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)" />
+
+  <!-- Subtle Inner Border -->
+  <rect x="6" y="6" width="500" height="500" rx="106" fill="none" stroke="rgba(255, 255, 255, 0.08)" stroke-width="3" />
+
+  <!-- Ambient Glow Circles -->
+  <circle cx="256" cy="220" r="140" fill="#4f46e5" opacity="0.18" filter="blur(30px)" />
+  <circle cx="340" cy="320" r="90" fill="#38bdf8" opacity="0.15" filter="blur(25px)" />
+
+  <!-- Background Layer Card (Floating Back) -->
+  <g filter="url(#cardShadow)">
+    <rect x="120" y="110" width="272" height="230" rx="28" fill="#1e293b" fill-opacity="0.7" stroke="rgba(255, 255, 255, 0.12)" stroke-width="2" transform="rotate(-6 256 225)" />
+  </g>
+
+  <!-- Main Front Card -->
+  <g filter="url(#cardShadow)">
+    <rect x="116" y="130" width="280" height="240" rx="32" fill="#0f172a" stroke="rgba(255, 255, 255, 0.18)" stroke-width="2" />
+    
+    <!-- Card header line -->
+    <line x1="156" y1="180" x2="356" y2="180" stroke="rgba(255, 255, 255, 0.1)" stroke-width="4" stroke-linecap="round" />
+    <circle cx="166" cy="180" r="6" fill="#38bdf8" />
+    <line x1="186" y1="180" x2="260" y2="180" stroke="#94a3b8" stroke-width="5" stroke-linecap="round" />
+    
+    <!-- Item 1 - Completed -->
+    <rect x="146" y="212" width="220" height="42" rx="12" fill="rgba(30, 41, 59, 0.8)" stroke="rgba(56, 189, 248, 0.25)" stroke-width="1.5" />
+    <circle cx="172" cy="233" r="10" fill="#10b981" />
+    <path d="M168 233 L171 236 L177 229" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+    <line x1="194" y1="233" x2="280" y2="233" stroke="#e2e8f0" stroke-width="4" stroke-linecap="round" />
+    <rect x="300" y="225" width="52" height="16" rx="6" fill="rgba(16, 185, 129, 0.2)" />
+    <circle cx="340" cy="233" r="3" fill="#10b981" />
+
+    <!-- Item 2 - In Progress (Active) -->
+    <rect x="146" y="268" width="220" height="42" rx="12" fill="rgba(59, 130, 246, 0.15)" stroke="url(#accentGrad)" stroke-width="2" />
+    <circle cx="172" cy="289" r="10" fill="url(#glowGrad)" />
+    <circle cx="172" cy="289" r="4" fill="#ffffff" />
+    <line x1="194" y1="289" x2="295" y2="289" stroke="#ffffff" stroke-width="4.5" stroke-linecap="round" />
+    <rect x="310" y="281" width="44" height="16" rx="6" fill="url(#goldGrad)" />
+  </g>
+
+  <!-- Big Floating Check Badge at Bottom Right -->
+  <g filter="url(#cardShadow)">
+    <circle cx="370" cy="380" r="44" fill="url(#glowGrad)" stroke="#ffffff" stroke-width="4" />
+    <path d="M352 380 L365 393 L390 368" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+  </g>
+
+  <!-- Star Sparkle at Top Left -->
+  <path d="M110 90 Q125 90 125 75 Q125 90 140 90 Q125 90 125 105 Q125 90 110 90 Z" fill="#38bdf8" />
+</svg>

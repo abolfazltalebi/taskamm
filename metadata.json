@@ -1,0 +1,6 @@
+{
+  "name": "تسکامه | Taskame",
+  "description": "مدیر وظایف شخصی و تیمی هوشمند، آفلاین، با تقویم شمسی و PWA سریع",
+  "requestFramePermissions": ["notifications"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

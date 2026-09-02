@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-vazir: "Vazirmatn", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Tahoma, Arial, sans-serif;
+  }
+
+  * {
+    -webkit-tap-highlight-color: transparent;
+    font-family: var(--font-vazir);
+  }
+
+  body {
+    font-feature-settings: "ss01" 1, "ss02" 1, "cv01" 1;
+    touch-action: manipulation;
+    background-color: #F9FAFB;
+    color: #1E293B;
+  }
+
+  .dark body {
+    background-color: #0F172A;
+    color: #F8FAFC;
+  }
+}
+
+/* Custom sleek scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.25);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.45);
+}
+
+/* iOS Safe Areas */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 16px);
+}
+
+.pt-safe {
+  padding-top: env(safe-area-inset-top, 16px);
+}
+
+/* Smooth drag and drop styles */
+.dragging-card {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  cursor: grabbing !important;
+}
+
+/* Subtle executive panels */
+.polish-card {
+  background-color: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+}
+
+.dark .polish-card {
+  background-color: #1E293B;
+  border-color: #334155;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+}
+
